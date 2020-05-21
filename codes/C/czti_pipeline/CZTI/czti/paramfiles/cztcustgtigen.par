@@ -1,0 +1,7 @@
+eventfile,f,ql,"AS1G07_024T01_9000001206_08632cztM0_level2_bc.evt",,,"Enter the event file"
+mkffile,f,ql,"/data2/czti/level2/20170604_A03_105T01_9000001268_level2/czti/orbit/09116/AS1A03_105T01_9000001268_09116czt_level2.mkf",,,"Enter mkf file"
+thresholdfile,f,ql,"/home/cztipoc/czti/trunk/code/transients/mkfThresholds.txt",,,"Enter MKF threshold file"
+outfile,f,ql,"/data2/czti/testarea/Mayuri/abc.gti",,,"Enter output filename"
+usergtifile,f,q,"-",,,"Any user defined GTI file"
+history,b,a,y,,,"Want history to be written to output file(YES/NO)"
+clobber,b,a,y,,,"Want to overwrite the output file(yes/no)"

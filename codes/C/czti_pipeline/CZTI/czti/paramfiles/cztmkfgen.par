@@ -1,0 +1,8 @@
+inattfilename,f,a,"/data2/czti/testarea/priyanka/20170711_G07_046T01_9000001374_level1/czti/09663/aux/aux1/AS1G07_046T01_9000001374czt_level1.att",,,"Enter Input Attitude file"
+inlbtfilename,f,a,"/data2/czti/testarea/priyanka/20170711_G07_046T01_9000001374_level1/czti/09663/aux/aux2/AS1G07_046T01_9000001374czt_level1.lbt",,,"Enter Input LBT file"
+inorbfilename,f,a,"/data2/czti/testarea/priyanka/20170711_G07_046T01_9000001374_level1/czti/09663/aux/aux3/AS1G07_046T01_9000001374czt_level1.orb",,,"Enter Input Orbit file"
+inhdrfilename,f,a,"/data2/czti/testarea/priyanka/20170711_G07_046T01_9000001374_level1/czti/level263/level2.hdr",,,"Enter Input Header file"
+outmkffilename,f,a,"/data2/czti/testarea/priyanka/20170711_G07_046T01_9000001374_level1/level2.mkf",,,"Enter Output MKF file"
+history,b,a,y,,,"Write history keywords(yes/no)"
+clobber,b,a,n,,,"Overwrite Existing files(yes/no)"
+mode,s,h,"ql",,,"Mode"

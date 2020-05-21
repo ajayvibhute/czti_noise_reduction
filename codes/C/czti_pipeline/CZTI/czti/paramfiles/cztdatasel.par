@@ -1,0 +1,7 @@
+infile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_bc.evt",,,"Enter Input Event file:"
+gtifile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2.gti",,,"Enter GTI filename:"
+gtitype,s,ql,"QUAD",,,"Enter GTI type (common/quad):"
+outfile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_quad_bc_ds.evt",,,"Enter output filename:"
+clobber,b,a,YES,,,"Overwrite Existing file?"
+history,b,a,YES,,,"Write history keywords in fits file"
+Mode,s,h,"ql",,,"Mode"

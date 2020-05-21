@@ -1,0 +1,31 @@
+SIMPLE  =                    T / file does conform to FITS standard
+BITPIX  =                   16 / number of bits per data pixel
+NAXIS   =                    0 / number of data axes
+EXTEND  =                    T / FITS dataset may contain extensions
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 'CZTI-POC'		   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+CONTENT = ''				   / File content
+DATE    =					   / Creation Date
+
+XTENSION= 'BINTABLE'              / binary table extension
+BITPIX  =                    8    / 8-bit bytes
+NAXIS   =                    2    / 2-dimensional binary table
+NAXIS1  =                         / width of table in bytes
+NAXIS2  =                         / number of rows in table
+PCOUNT  =                    0    / size of special data area
+GCOUNT  =                    1    / one data group (required keyword)
+EXTNAME = 'GTI     '              / name of this binary table extension
+TFIELDS =                    2    / number of fields in each row
+TTYPE1  = 'START   '              / label for field   1
+TFORM1  = 'D       '              / data format of field: 8-byte DOUBLE
+TUNIT1  = 's       '              / physical unit of field
+TTYPE2  = 'STOP    '              / label for field   2
+TFORM2  = 'D       '              / data format of field: 8-byte DOUBLE
+TUNIT2  = 's       '              / physical unit of field
+CREATOR = '' 				      / Module that created this file
+DATE    =                         / file creation date (YYYY-MM-DDThh:mm:ss UT)
+

@@ -1,0 +1,4 @@
+par_CALDBfile,s,a,"CAMERAGEO",,,"Enter CALDB file type: (CAMERAGEO/)"
+par_clobber,b,a,"YES",,,"Overwrite Existing file"
+par_history,b,a,"YES",,,"Write History to output file"
+mode,s,h,"ql",,,"Mode"

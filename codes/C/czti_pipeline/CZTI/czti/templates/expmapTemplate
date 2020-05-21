@@ -1,0 +1,42 @@
+SIMPLE=T                       / file does conform to FITS standard
+BITPIX= 16                     / number of bits per data pixel
+NAXIS=0                        /number of data axes
+EXTEND=T                       /FITS dataset may contain extensions
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 					   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+CONTENT = 'EXPOSURE MAP'	   / File content
+DATE    =					   / Creation Date
+Version =					   / Extension Version Number
+
+XTENSION = 'BINTABLE'          /binary table extension
+BITPIX = 
+NAXIS = 2  					   / 2-dimensional binary table
+NAXIS1 =   					   / width of table in bytes
+NAXIS2 =   					   / number of rows in table
+PCOUNT =  					   / size of special data area
+GCOUNT =  					   / one data group (required keyword)
+TFIELDS =  					   / number of fields in each row
+TTYPE1  = 'DetX    '           / Detector ID in x
+TFORM1  = '1B      '           / data format of field: 1-byte char
+TTYPE2  = 'DetY    '           / Detector ID in y
+TFORM2  = '1B      '           / data format of field: 1-byte char
+TTYPE3  = 'PixX    '           / Pix ID in x
+TFORM3  = '1B      '           / data format of field: 1-byte char
+TTYPE4  = 'PixY    '           / Pix ID in y
+TFORM4  = '1B      '           / data format of field: 1-byte char
+TTYPE5  = 'x       '           / x-location of pixel
+TFORM5  = '1B      '           / data format of field: 1-byte char
+TTYPE6  = 'y       '           / y-location of pixelx
+TFORM6  = '1B      '           / data format of field: 1-byte char
+TTYPE7  = 'Exposure'           / Open fraction
+TFORM7  = '1E      '           / data format of field: 4-byte FLOAT
+EXTNAME = 'CZTEXPOSURE'        / name of this binary table extension
+ENERGY  =                      / Energy range to generate exposure
+THETAX  =                      / [degrees] Camera co-ordinate x
+THETAY  =                      / [degrees] Camera co-ordinate y
+
+

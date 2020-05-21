@@ -1,0 +1,11 @@
+prefix=/home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/LIBS/cfitsio/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: cfitsio
+Description: FITS File Subroutine Library
+Version: 3.28
+Libs: -L${libdir} -lcfitsio 
+Libs.private: -lm
+Cflags: -I${includedir}

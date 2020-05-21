@@ -1,0 +1,30 @@
+SIMPLE  =                    T   / file does conform to FITS standard
+BITPIX  =                    8   / number of bits per data pixel
+NAXIS   =                    2   / number of data axes
+NAXIS1  =                    0   / length of data axis 1
+NAXIS2  =                    0   / length of data axis 2
+EXTEND  =                    T   / FITS dataset may contain extensions
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+ORIGIN  = 'CZTI POC'             /
+CREATOR = 'cztpsfshadowgen_v1.0' / 
+END
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  =                   32   / number of bits per data pixel
+NAXIS   =                    2   / number of data axes
+NAXIS1  =                  128   / length of data axis 1
+NAXIS2  =                  128   / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+EXTNAME =                        /
+THETA_X =                        /
+THETA_Y =                        /
+RA      =                        /
+DEC     =                        /
+FLUX    =                        /
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+ORIGIN  = 'CZTI POC'             / 
+CREATOR = 'cztpsfshadowgen_v1.0' / 
+FILENAME=                        / 
+END
+

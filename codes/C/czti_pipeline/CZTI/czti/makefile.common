@@ -1,0 +1,33 @@
+ff=gfortran -ffixed-line-length-none -c
+cc=gcc -c
+ccc=g++ -DNDEBUG
+INCLUDE=-I. -I../common/ -I../../include/  $(INCLUDE1)
+LIB=-L ../../lib/ -lpil -lcfitsio -lglog -ljpeg -lgfortran -lm  
+CP=cp
+
+OBJECTS=$(SOURCES:.cpp=.o)  $(SOURCES2:.c=.o) $(SOURCES3:.f=.o)
+CDIR=../common
+BINDIR=../../bin
+
+all       	: $(EXE)
+		$(CP) $(EXE) $(BINDIR)
+		$(RM) $(EXE)
+		$(RM) *.o $(CDIR)/*.o
+
+$(EXE) 		: $(OBJECTS)
+		$(ccc) $(OBJECTS) $(INCLUDE) $(LIB)  -o  $(EXE)
+		#$(CP) $(EXE) $(BINDIR)
+
+.cpp.o		: 
+		$(ccc) -w -c $< -o $@ $(INCLUDE)
+
+.c.o		: 
+		$(cc) $< -o $@ $(INCLUDE)
+
+.f.o        :
+		$(ff) $< -o $@ $(INCLUDE)
+
+clean:
+	$(RM) $(EXE)
+	$(RM) *.o $(CDIR)/*.o
+

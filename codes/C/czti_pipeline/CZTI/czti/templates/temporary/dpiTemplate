@@ -1,0 +1,150 @@
+SIMPLE  =                    T   / file does conform to FITS standard
+BITPIX  =                   16   / number of bits per data pixel
+NAXIS   =                    0   / number of data axes
+EXTEND  =                    T   / FITS dataset may contain extensions
+MISSION = 'ASTROSAT'             / Name of mission/satellite
+TELESCOP= 'ASTROSAT'             / Name of mission/satellite
+INSTRUME= 'CZTI    '             / Name of Instrument/detector
+ORIGIN  = 'CZTI POC'             / Source of FITS file
+CREATOR = 'cztdpigen_v1.0'       / Creator of file
+FILENAME=                        /
+CONTENT =                        / File content
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+DATE-OBS=                        / Start date for data
+TIME-OBS=                        / Start time for data
+DATE-END=                        / End date for data
+TIME-END=                        / End time for data
+TIMESYS = 'TT      '             / Time will be TT(Terrestrial Time)
+MJDREFI =                86400   / 2010.0(UTC) expressed in TT (Integer part)
+MJDREFF =                    0   / 2010 expressed in TT (Fractional Part)
+TIMEZERI=                    0   / Clock correction integer
+TIMEZERF=                    0   / Clock correction fractional
+TIMEDEL =                   0.   / Time Resolution
+TIMEUNIT= 's       '             / Unit
+TSTARTI =                        / integer observation start time
+TSTARTF =                        / fractional observation start time
+TSTOPI  =                        / integer observation stop time
+TSTOPF  =                        / fractional observation stop time
+OBJECT  = '        '             / Source Information Block
+RA_PNT  =                        / Nominal Pointing
+DEC_PNT =                        / Nominal Pointing
+EQUINOX =                2000.   / J2000.0
+RADECSYS= 'ICRF    '             / Julian Corrdinate Reference Frame
+OBSERVER= '        '             / Observation Information Block
+OBS_ID  =                        / Julian Corrdinate Reference Frame
+SOURCEID=                        / Source Id
+TARGETID=                        / TARGETID
+EXP_TIME=                   0.   / Exposure Time
+ORB_NUM =                        / Orbit Number
+VERSION =                        / Extension Version Number
+END
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  =  32                    / Number of bits per data pixel  
+NAXIS   =  2                     / number of data axes
+NAXIS1  =  64                    / length of data axis 1
+NAXIS2  =  64                    / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+EXTNAME = 'Q0'				     / Name of this image extension
+QUADID  =  0                     / Quadrant Number
+ORIGIN  = 'CZTI-POC'             / Source of FITS file
+CREATOR =                        / Module that created this file
+HDUVERS =                        / version no of the format
+HDUCLASS= 'OGIP    '             / format confirms to OGIP/GSFC standard
+LONGSTRN= 'OGIP 1.0'             / The OGIP long string convention may be used
+EMIN    =                        / minimum energy value
+EMAX    =                	     / maximum energy value
+TSTART  =					     / Time start
+TSTOP   =					     / Time stop	
+ECOL    = ''				     / Column name for energy
+DPHCOUNT= 					     / Total counts in DPh
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  = 32                     / number of bits per data pixel
+NAXIS   =  2                     / number of data axes
+NAXIS1  = 64                     / length of data axis 1
+NAXIS2  = 64                     / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+EXTNAME = 'Q1'				     / Name of this image extension
+QUADID  =  1                     / Quadrant Number
+ORIGIN  = 'CZTI-POC'             / Source of FITS file
+CREATOR =                        / Module that created this file
+HDUVERS =                        / version no of the format
+HDUCLASS= 'OGIP    '             / format confirms to OGIP/GSFC standard
+LONGSTRN= 'OGIP 1.0'             / The OGIP long string convention may be used
+EMIN    =                        / minimum energy value
+EMAX    =                	     / maximum energy value
+TSTART  =					     / Time start
+TSTOP   =					     / Time stop	
+ECOL    = ''				     / Column name for energy
+TOTCOUNT= 					     / Total counts in DPh
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  =  32                    / number of bits per data pixel
+NAXIS   =  2                     / number of data axes
+NAXIS1  =  64                    / length of data axis 1
+NAXIS2  =  64                    / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+EXTNAME = 'Q2'				     / Name of this image extension
+QUADID  = 2                      / Quadrant Number
+ORIGIN  = 'CZTI-POC'             / Source of FITS file
+CREATOR =                        / Module that created this file
+HDUVERS =                        / version no of the format
+HDUCLASS= 'OGIP    '             / format confirms to OGIP/GSFC standard
+LONGSTRN= 'OGIP 1.0'             / The OGIP long string convention may be used
+EMIN    =                        / minimum energy value
+EMAX    =                	     / maximum energy value
+TSTART  =					     / Time start
+TSTOP   =					     / Time stop	
+ECOL    = ''				     / Column name for energy
+TOTCOUNT= 					     / Total counts in DPH
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  = 32                     / number of bits per data pixel
+NAXIS   =  2                     / number of data axes
+NAXIS1  = 64                     / length of data axis 1
+NAXIS2  = 64                     / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+EXTNAME = 'Q3'				     / Name of this image extension
+QUADID  = 3                      / Quadrant Number
+ORIGIN  = 'CZTI-POC'             / Source of FITS file
+CREATOR =                        / Module that created this file
+HDUVERS =                        / version no of the format
+HDUCLASS= 'OGIP    '             / format confirms to OGIP/GSFC standard
+LONGSTRN= 'OGIP 1.0'             / The OGIP long string convention may be used
+EMIN    =                        / minimum energy value
+EMAX    =                	     / maximum energy value
+TSTART  =					     / Time start
+TSTOP   =					     / Time stop	
+ECOL    = ''				     / Column name for energy
+TOTCOUNT= 					     / Total counts in DPH
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+
+XTENSION= 'IMAGE   '             / IMAGE extension
+BITPIX  = 32                     / number of bits per data pixel
+NAXIS   = 2                      / number of data axes
+NAXIS1  = 128                    / length of data axis 1
+NAXIS2  = 128                    / length of data axis 2
+PCOUNT  =                    0   / required keyword; must = 0
+GCOUNT  =                    1   / required keyword; must = 1
+ORIGIN  = 'CZTI-POC'             / Source of FITS file
+CREATOR =                        / Module that created this file
+HDUVERS =                        / version no of the format
+HDUCLASS= 'OGIP    '             / format confirms to OGIP/GSFC standard
+LONGSTRN= 'OGIP 1.0'             / The OGIP long string convention may be used
+EMIN    =                        / minimum energy value
+EMAX    =                	     / maximum energy value
+TSTART  =					     / Time start
+TSTOP   =					     / Time stop	
+ECOL    = ''				     / Column name for energy
+TOTCOUNT= 					     / Total counts in DPH
+DATE    =                        / file creation date (YYYY-MM-DDThh:mm:ss UT)
+EXTNAME = 'FULL_DPI'		     / Name of this image extension
+END  

@@ -1,0 +1,86 @@
+SIMPLE  =                    T / file does conform to FITS standard
+BITPIX  =                   16 / number of bits per data pixel
+NAXIS   =                    0 / number of data axes
+EXTEND  =                    T / FITS dataset may contain extensions
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 					   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+CONTENT = 'GEOMETRY'		   / File content
+DATE    =					   / Calibration Date
+Version =					   / Extension Version Number
+COMMENT ------------------------------------------------------------
+COMMENT  CALDB KEYWORDS
+COMMENT ------------------------------------------------------------
+CCLS0001 = 'BCF'			   / Basic Calibration File
+CCNM0001 = 'GEOMETRY'		   / Type of Calibration Data
+CDTP0001 = 'DATA'			   / Calibration File contains Data
+CVSD0001 =  				   / Validity Start Date in UTC (yyyy-mm-dd)
+CVST0001 = 					   / Validity Start Time in UTC (hh:mm:ss)
+CDES0001 = 'CZTI CAMERA GEOMETRY DEFINITION FILE' / Brief Descriptive Summary of this file
+
+XTENSION= 'BINTABLE'           / binary table extension
+BITPIX  =                    8 / 8-bit bytes
+NAXIS   =                    2 / 2-dimensional binary table
+NAXIS1  =                      / width of table 
+NAXIS2  =                      / number of rows
+PCOUNT  =                      / size of special data area
+GCOUNT  =                    1 / one data group (required keyword)
+TFIELDS =                    18/ number of fields in each row
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 					   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+COMMENT ------------------------------------------------------------
+COMMENT  CALDB KEYWORDS
+COMMENT ------------------------------------------------------------
+CCLS0001 = 'BCF'			   / Basic Calibration File
+CCNM0001 = 'GEOMETRY'		   / Type of Calibration Data
+CDTP0001 = 'DATA'			   / Calibration File contains Data
+CVSD0001 =  				   / Validity Start Date in UTC (yyyy-mm-dd)
+CVST0001 = 					   / Validity Start Time in UTC (hh:mm:ss)
+CDES0001 = 'CZTI CAMERA GEOMETRY DEFINITION FILE' / Brief Descriptive Summary of this file
+TTYPE1  = 'Index   '           / Surface Index Number
+TFORM1  = 'I       '           / data format of field: short integer
+TTYPE2  = 'zmin    '           / Minimum Vertical Extent
+TFORM2  = 'E       '           / data format of field: Real/Float
+TTYPE3  = 'zmax    '           / Maximum Vertical Extent
+TFORM3  = 'E       '           / data format of field: Real/Float
+TTYPE4  = 'xminz   '           / Coefficient xminz
+TFORM4  = 'E       '           / data format of field: Real/Float
+TTYPE5  = 'xminc   '           / Intercept xminc
+TFORM5  = 'E       '           / data format of field: Real/Float
+TTYPE6  = 'xmaxz   '           / Coefficient xmaxz
+TFORM6  = 'E       '           / data format of field: Real/Float
+TTYPE7  = 'xmaxc   '           / Intercept xmaxc
+TFORM7  = 'E       '           / data format of field: Real/Float
+TTYPE8  = 'yminz   '           / Coefficient yminz
+TFORM8  = 'E       '           / data format of field: Real/Float
+TTYPE9  = 'yminc   '           / Intercept yminc
+TFORM9  = 'E       '           / data format of field: Real/Float
+TTYPE10 = 'ymaxz   '           / Coefficient ymaxz
+TFORM10 = 'E       '           / data format of field: Real/Float
+TTYPE11 = 'ymaxc   '           / Intercept ymaxc
+TFORM11 = 'E       '           / data format of field: Real/Float
+COMMENT ---------------------------------------------------------
+COMMENT SURFACE DEFINITION :     xnp*x + ynp*y + znp*z = dnp
+COMMENT ---------------------------------------------------------
+TTYPE12 = 'xnp     '           / Direction cosine in x direction
+TFORM12 = 'E       '           / data format of field: Real/Float
+TTYPE13 = 'ynp     '           / Direction cosine in y direction
+TFORM13 = 'E       '           / data format of field: Real/Float
+TTYPE14 = 'znp     '           / Direction cosine in z direction
+TFORM14 = 'E       '           / data format of field: Real/Float
+TTYPE15 = 'dnp     '           / constant to define surface location
+TFORM15 = 'E       '           / data format of field: Real/Float
+TTYPE16 = 'thickAl '           / Effective normal thickness of Al (in cm)
+TFORM16 = 'E       '           / data format of field: Real/Float
+TTYPE17 = 'thickTa '           / Effective normal thickness of Ta (in cm)
+TFORM17 = 'E       '           / data format of field: Real/Float
+TTYPE18 = 'openfrac'           / Open Fraction
+TFORM18 = 'E       '           / data format of field: Real/Float
+EXTNAME = 'SURFACE_DEFINITION' / name of this binary table extension

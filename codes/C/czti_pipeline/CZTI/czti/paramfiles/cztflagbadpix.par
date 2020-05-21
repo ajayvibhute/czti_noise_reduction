@@ -1,0 +1,7 @@
+nbadpixFiles,i,ql,1,1,20,"Enter number of badpix files to be read?"
+badpixfile,f,ql,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_quad_badpix.fits",,,"Enter bad pixel file name:"
+outfile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_quad_badpix.fits_",,,"Enter output badpixel file:"
+clobber,b,a,YES,,,"Want to overwrite..?(YES/NO)"
+history,b,a,YES,,,"Want to add history..?(YES/NO)"
+debug,b,h,no,,,"Debug?"
+mode,s,h,"ql",,,"Mode parameter"

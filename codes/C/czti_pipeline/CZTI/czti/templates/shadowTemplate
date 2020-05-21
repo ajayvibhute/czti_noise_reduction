@@ -1,0 +1,55 @@
+SIMPLE  =                    T / file does conform to FITS standard
+BITPIX  =                   16 / number of bits per data pixel
+NAXIS   =                    0 / number of data axes
+EXTEND  =                    T / FITS dataset may contain extensions
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 'CZTI-POC'		   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+CONTENT = 'SHADOW'  		   / File content
+Version =					   / Extension Version Number
+
+XTENSION= 'BINTABLE'           / binary table extension
+BITPIX  =                    8 / 8-bit bytes
+NAXIS   =                    2 / 2-dimensional binary table
+NAXIS1  =                      / width of table 
+NAXIS2  =                      / number of rows
+PCOUNT  =                      / size of special data area
+GCOUNT  =                    1 / one data group (required keyword)
+TFIELDS =                    18/ number of fields in each row
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 					   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+TTYPE1  = 'Detx'               / Detector location along x-axis
+TFORM1  = 'I'                  / Data format of field: short integer
+TTYPE2  = 'Dety'               / Detector location along y-axis
+TFORM2  = 'I'                  / Data format of field: short integer
+TTYPE3  = 'Pixx'               / Pixel location along x-axis in detector
+TFORM3  = 'I'                  / Data format of field: short integer
+TTYPE4  = 'Pixy'               / Pixel location along y-axis in detector
+TFORM4  = 'I'                  / Data format of field: short integer
+TTYPE5  = 'x'                  / Actual pixel location in x-direction considering all 4 quadrants
+TFORM5  = 'I'                  / Data format of field: short integer
+TTYPE6  = 'y'                  / Actual pixel location in y-direction considering all 4 quadrants
+TFORM6  = 'I'                  / Data format of field: short integer
+TTYPE7  = 'Shadow'             / shadow of source 
+TFORM7  = 'E'                  / Data format of field: float
+EXTNAME = 'SHADOW'             /Name of this binary table extension
+COMMENT ------------------------------------------------------
+COMMENT NECESSARY KEYWORDS
+COMMENT ------------------------------------------------------
+RA      =                      / [deg] RA of source for which shadow is generated
+DEC     =                      / [deg] DEC of source for which shadow is generated
+THETAX  =                      / [rad] THETAX of source for which shadow is generated
+THETAY  =                      / [rad] THETAY of source for which shadow is generated
+FLUX    =                      / Flux (Counts/area)
+ESTART  =                      / Mininum energy (in keV)
+ESTOP   =                      / Maximum Energy (in keV)
+NBINS   =                      / Number of Energy bins
+
+

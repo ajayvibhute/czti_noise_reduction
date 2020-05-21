@@ -1,0 +1,8 @@
+infile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_quad_bc_ds_pc.evt",,,"Enter input event file:"
+outfile,f,a,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_quad_clean.evt",,,"Enter output event filename:"
+alphaval,s,a,"0",,,"Alpha values to be accepted(0;1;0,1):"
+vetorange,s,a,"0",,,"Veto Range/Ranges to accept:"
+clobber,b,a,YES,,,"Overwrite Existing file?"
+isdoubleEvent,b,h,n,,,"Is this double event file? :"
+history,b,a,YES,,,"Write history keywords in fits file"
+mode,s,h,"ql",,,"Mode"

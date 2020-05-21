@@ -1,0 +1,10 @@
+prefix=/home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/LIBS/glog_modified-0.3.2/../..
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libglog
+Description: Google Log (glog) C++ logging framework
+Version: 0.3.2
+Libs: -L${libdir} -lglog
+Cflags: -I${includedir}

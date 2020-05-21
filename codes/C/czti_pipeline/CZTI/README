@@ -1,0 +1,74 @@
+*********************************************************
+ASTROSAT CZTI Level 1 to Level 2 Data processing pipeline 
+Public Release version 2.1 dated 08 Mar 2018
+
+Released from: CZTI Payload Operation Centre, IUCAA, Pune
+
+Developed by:
+Ajay Vibhute (IUCAA, Pune)
+Preeti Tahliani, Tanul Gupta (SAC, Ahmedabad)
+Mithun NPS (PRL, Ahmedabad)
+Rakesh Khanna (TIFR, Mumbai)
+Helpdesk Email Address: cztihelp@iucaa.in
+---------------------------------------------------------
+
+
+Pre-Requisites
+	OS: Linux/Unix (CentOS-5.8+, Ubuntu 14.04+, OS X 10.10+, Scientific Linux 6.5+)
+	Compiler: gcc (GCC) 4.4+, Perl, gfortran
+
+OS X users: 
+	Do not mix apple compilers with those installed from other sources. We have tested the pipeline with the macports versions of perl, python and gcc
+
+
+1.Run the command 'bash' to change the shell to bash shell  
+
+2.Untar the package.
+	tar -xvf czti_pipeline_20180308_V2.1.tar
+	This will create a directory named "czti_pipeline"
+ 
+3.Set following environment variables in ~/.bashrc file
+
+	as1czt : Absolute path of czti folder( under "czti_pipeline/czti")
+	PFILES : Absolute path of paramfiles folder
+	PATH   : Absolute path of bin directory where all executables are placed 
+	LD_LIBRARY_PATH : Path to shared libraries 
+
+Add following lines to ~/.bashrc file
+
+	export as1czt=<path to czti directory>
+	export PFILES=$as1czt/paramfiles
+	export PATH=$as1czt/bin:$as1czt/scripts:$PATH
+	export GLOG_log_dir=$as1czt/log
+	export CZTI_templates=$as1czt/templates
+	export PERL5LIB="$as1czt/lib/":$PERL5LIB	
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$as1czt/lib
+	ulimit -s 65532
+
+OS X users: In addition to above lines, specify DYLD_LIBRARY_PATH by adding below line to ~/.bashrc. 
+	export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$as1czt/lib
+
+4. CALDB installation
+	Untar  caldb_goodfiles_as1_czti*.tar.gz in a preferred location or under existing CALDB directory if caldb installation for other missions are present. It should produce directory structure data/as1/czti/, under which there would be caldb.indx file and calibration files.
+
+Export the CALDB path by adding the below line in ~/.bashrc file
+
+	export CALDB=<path to CALDB directory>
+
+5. tar file creation time must be less than the system time.
+
+6. Run the following commands
+	source ~/.bashrc
+	cd $as1czt
+	cd ../
+	./InstallLibs
+	cd $as1czt
+	make
+	cd scripts
+	chmod +x cztpipeline
+
+	$as1czt folder must contain include/, lib/ and bin/ directories
+
+7. Now you can use the czti software modules. You can run entire pipeline using 'cztpipeline'. 
+   The script will ask for level1 directory path, which should be provided by the user. In case you wish to run a single module independently or cztpipeline is not working for some reason, you can copy the relevant command from cztpipeline script. 
+	

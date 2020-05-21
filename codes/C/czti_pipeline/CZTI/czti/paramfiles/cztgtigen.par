@@ -1,0 +1,7 @@
+eventfile,f,ql,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2_bc.evt",,,"Enter the event file"
+mkffile,f,ql,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti/AS1A03_086T01_9000001568_10824czt_level2.mkf",,,"Enter mkf file"
+thresholdfile,f,ql,"/home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/czti/paramfiles/mkfThresholds.txt",,,"Enter MKF threshold file"
+outfile,f,ql,"/data2/czti/testarea/mayuri/pipeline_2.1_test_1001/lv_10/20170927_A03_086T01_9000001568_level2/czti//modeM0/AS1A03_086T01_9000001568cztM0_level2.gti",,,"Enter output filename"
+usergtifile,f,q,"-",,,"Any user defined GTI file"
+history,b,a,y,,,"Want history to be written to output file(YES/NO)"
+clobber,b,a,y,,,"Want to overwrite the output file(yes/no)"

@@ -1,0 +1,150 @@
+SIMPLE=T                       / file does conform to FITS standard
+BITPIX= 16                     / number of bits per data pixel
+NAXIS=0                        /number of data axes
+EXTEND=T                       /FITS dataset may contain extensions
+MISSION = 'ASTROSAT'		   / Name of mission/satellite
+TELESCOP= 'ASTROSAT'		   / Name of mission/satellite
+INSTRUME= 'CZTI'			   / Name of Instrument/detector
+ORIGIN	= 'CZTI-POC'		   / Source of FITS file
+CREATOR = 					   / Creator of file
+FILENAME= 					   / Name of file
+DATE    =					   / Creation Date
+
+XTENSION = 'BINTABLE'          /binary table extension
+BITPIX = 
+NAXIS = 2  					   / 2-dimensional binary table
+NAXIS1 =   					   / width of table in bytes
+NAXIS2 =   					   / number of rows in table
+PCOUNT =  					   / size of special data area
+GCOUNT =  					   / one data group (required keyword)
+TFIELDS =  					   / number of fields in each row
+TTYPE1  = 'DetID    '          / Detector ID
+TFORM1  = '1B      '           / data format of field: 1-BYTE
+TTYPE2  = 'PixID    '          / Pixel ID
+TFORM2  = '1B      '           / data format of field: 1-BYTE
+TTYPE3  = 'PixX    '           / Pix location in X (for this quadrant)
+TFORM3  = '1B      '           / data format of field: 1-BYTE
+TTYPE4  = 'PixY    '           / Pix location in Y (for this quadrant)
+TFORM4  = '1B      '           / data format of field: 1-BYTE
+TTYPE5  = 'PIX_FLAG'        / badpix flag
+TFORM5  = '1B      '           / data format of field: 1-BYTE
+EXTNAME = 'Q0'          / name of this binary table extension
+ORIGIN  = 'CZTI-POC'           / Source of FITS file
+CREATOR =                      / Module that created this file
+FILENAME= 					   / Name of file
+CONTENT = 'Bad pixel list'	   / File content
+DATE    =                      / file creation date
+COMMENT '-------------------------------------------------'
+COMMENT 'Pixel Quality flags'
+COMMENT 'Good-0; Spectrscopically bad-1'
+COMMENT 'Flickering-2; Noisy-3; Dead/Inactive-4'
+COMMENT '-------------------------------------------------'
+
+XTENSION = 'BINTABLE'          /binary table extension
+BITPIX = 
+NAXIS = 2  					   / 2-dimensional binary table
+NAXIS1 =   					   / width of table in bytes
+NAXIS2 =   					   / number of rows in table
+PCOUNT =  					   / size of special data area
+GCOUNT =  					   / one data group (required keyword)
+TFIELDS =  					   / number of fields in each row
+TTYPE1  = 'DetID    '          / Detector ID
+TFORM1  = '1B      '           / data format of field: 1-BYTE
+TTYPE2  = 'PixID    '          / Pixel ID
+TFORM2  = '1B      '           / data format of field: 1-BYTE
+TTYPE3  = 'PixX    '           / Pix location in X (for this quadrant)
+TFORM3  = '1B      '           / data format of field: 1-BYTE
+TTYPE4  = 'PixY    '           / Pix location in Y (for this quadrant)
+TFORM4  = '1B      '           / data format of field: 1-BYTE
+TTYPE5  = 'PIX_FLAG'        / badpix flag
+TFORM5  = '1B      '           / data format of field: 1-BYTE
+EXTNAME = 'Q1'          / name of this binary table extension
+ORIGIN  = 'CZTI-POC'           / Source of FITS file
+CREATOR =                      / Module that created this file
+FILENAME= 					   / Name of file
+CONTENT = 'Bad pixel list'	   / File content
+DATE    =                      / file creation date
+COMMENT '-------------------------------------------------'
+COMMENT 'Pixel Quality flags'
+COMMENT 'Good-0; Spectrscopically bad-1'
+COMMENT 'Flickering-2; Noisy-3; Dead/Inactive-4'
+COMMENT '-------------------------------------------------'
+
+XTENSION = 'BINTABLE'          /binary table extension
+BITPIX = 
+NAXIS = 2  					   / 2-dimensional binary table
+NAXIS1 =   					   / width of table in bytes
+NAXIS2 =   					   / number of rows in table
+PCOUNT =  					   / size of special data area
+GCOUNT =  					   / one data group (required keyword)
+TFIELDS =  					   / number of fields in each row
+TTYPE1  = 'DetID    '          / Detector ID
+TFORM1  = '1B      '           / data format of field: 1-BYTE
+TTYPE2  = 'PixID    '          / Pixel ID
+TFORM2  = '1B      '           / data format of field: 1-BYTE
+TTYPE3  = 'PixX    '           / Pix location in X (for this quadrant)
+TFORM3  = '1B      '           / data format of field: 1-BYTE
+TTYPE4  = 'PixY    '           / Pix location in Y (for this quadrant)
+TFORM4  = '1B      '           / data format of field: 1-BYTE
+TTYPE5  = 'PIX_FLAG'        / badpix flag
+TFORM5  = '1B      '           / data format of field: 1-BYTE
+EXTNAME = 'Q2'          / name of this binary table extension
+ORIGIN  = 'CZTI-POC'           / Source of FITS file
+CREATOR =                      / Module that created this file
+FILENAME= 					   / Name of file
+CONTENT = 'Bad pixel list'	   / File content
+DATE    =                      / file creation date
+COMMENT '-------------------------------------------------'
+COMMENT 'Pixel Quality flags'
+COMMENT 'Good-0; Spectrscopically bad-1'
+COMMENT 'Flickering-2; Noisy-3; Dead/Inactive-4'
+COMMENT '-------------------------------------------------'
+
+XTENSION = 'BINTABLE'          /binary table extension
+BITPIX = 
+NAXIS = 2  					   / 2-dimensional binary table
+NAXIS1 =   					   / width of table in bytes
+NAXIS2 =   					   / number of rows in table
+PCOUNT =  					   / size of special data area
+GCOUNT =  					   / one data group (required keyword)
+TFIELDS =  					   / number of fields in each row
+TTYPE1  = 'DetID    '          / Detector ID
+TFORM1  = '1B      '           / data format of field: 1-BYTE
+TTYPE2  = 'PixID    '          / Pixel ID
+TFORM2  = '1B      '           / data format of field: 1-BYTE
+TTYPE3  = 'PixX    '           / Pix location in X (for this quadrant)
+TFORM3  = '1B      '           / data format of field: 1-BYTE
+TTYPE4  = 'PixY    '           / Pix location in Y (for this quadrant)
+TFORM4  = '1B      '           / data format of field: 1-BYTE
+TTYPE5  = 'PIX_FLAG'        / badpix flag
+TFORM5  = '1B      '           / data format of field: 1-BYTE
+EXTNAME = 'Q3'          / name of this binary table extension
+ORIGIN  = 'CZTI-POC'           / Source of FITS file
+CREATOR =                      / Module that created this file
+FILENAME= 					   / Name of file
+CONTENT = 'Bad pixel list'	   / File content
+DATE    =                      / file creation date
+COMMENT '-------------------------------------------------'
+COMMENT 'Pixel Quality flags'
+COMMENT 'Good-0; Spectrscopically bad-1'
+COMMENT 'Flickering-2; Noisy-3; Dead/Inactive-4'
+COMMENT '-------------------------------------------------'
+
+XTENSION= 'IMAGE   '           / IMAGE extension
+BITPIX  = 8                    
+NAXIS   =  2                   / number of data axes
+NAXIS1  =                      / length of data axis 1
+NAXIS2  =                      / length of data axis 2
+PCOUNT  =                    0 / required keyword; must = 0
+GCOUNT  =                    1 / required keyword; must = 1
+EXTNAME = 'BADPIX'  		   / Name of this image extension
+ORIGIN  = 'CZTI-POC'           / Source of FITS file
+CREATOR =                      / Module that created this file
+FILENAME= 					   / Name of file
+CONTENT = 'Bad pixel map'	   / File content
+DATE    =                      / file creation date
+COMMENT '-------------------------------------------------'
+COMMENT 'Pixel Quality flags'
+COMMENT 'Good-0; Spectrscopically bad-1'
+COMMENT 'Flickering-2; Noisy-3; Dead/Inactive-4'
+COMMENT '-------------------------------------------------'
