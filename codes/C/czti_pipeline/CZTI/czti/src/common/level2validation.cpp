@@ -365,6 +365,13 @@ int EventFileHandler::write_l2event_file(string l2eventFilename,string bunchFile
         quadEvtData[iquad].detid2.push_back(l1data.quadEventData.detid2[i]);
         quadEvtData[iquad].detid3.push_back(l1data.quadEventData.detid3[i]);
         quadEvtData[iquad].detid4.push_back(l1data.quadEventData.detid4[i]);
+        quadEvtData[iquad].DetId_fevt.push_back(l1data.quadEventData.DetId_fevt[i]);
+        quadEvtData[iquad].DetId_sevt.push_back(l1data.quadEventData.DetId_sevt[i]);
+        quadEvtData[iquad].DetId_tevt.push_back(l1data.quadEventData.DetId_tevt[i]);
+
+        quadEvtData[iquad].PixId_fevt.push_back(l1data.quadEventData.PixId_fevt[i]);
+        quadEvtData[iquad].PixId_sevt.push_back(l1data.quadEventData.PixId_sevt[i]);
+        quadEvtData[iquad].PixId_tevt.push_back(l1data.quadEventData.PixId_tevt[i]);
 //	LOG(INFO)<<l1data.quadEventData.bunch_time[i]<<" "<<l1data.quadEventData.evt_row_num[i]<<" "<<(int)l1data.quadEventData.time_dfs[i]<<" "<<(int)l1data.quadEventData.time_dsl[i]<<" "<<(int)l1data.quadEventData.num_bunchevents[i]<<" "<<(int)l1data.quadEventData.detid1[i];
 
 	}
@@ -906,8 +913,16 @@ int EventFileHandler::write_l2event_file(string l2eventFilename,string bunchFile
         fits_report_error(stderr, status);
         return (EXIT_FAILURE);
     }
-   
+  
+
+
 //writing bunch clean file
+/* Modified by Ajay; Adding additional information about bunch, two columns, detid pixid
+ * */
+
+
+
+
     fits_open_file(&bunchptr, (char*) bunchFile.c_str(), READWRITE, &status);
     if (status) {
         LOG(ERROR) << "Error in opening level-2 bunch file: " << l2eventFilename;
@@ -1077,6 +1092,7 @@ int EventFileHandler::write_l2event_file(string l2eventFilename,string bunchFile
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
         }
+
         fits_write_col(bunchptr, TLONG, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].evt_row_num.data(), &status);
         if (status) {
             LOG(ERROR) << "Error in writing RowNum COLUMN of " << bunchFile <<
@@ -1084,7 +1100,103 @@ int EventFileHandler::write_l2event_file(string l2eventFilename,string bunchFile
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
         }
+	/*Added by Ajay, 22 May 2020
+	 * For new noise reduction code added new columns, detid and pixid for first three events, which will be removed in bunch cleaning
+	 * */
+	//RowNum	
+	fits_get_colnum(bunchptr, CASEINSEN, "DetId_fevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for DetId_fevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+	
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].DetId_fevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing DetId_fevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_get_colnum(bunchptr, CASEINSEN, "PixId_fevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for PixId_fevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].PixId_fevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing PixId_fevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
 
+        fits_get_colnum(bunchptr, CASEINSEN, "DetId_sevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for DetId_sevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].DetId_sevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing DetId_sevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+
+        fits_get_colnum(bunchptr, CASEINSEN, "PixId_sevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for PixId_sevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].PixId_sevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing PixId_sevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+
+	fits_get_colnum(bunchptr, CASEINSEN, "DetId_tevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for DetId_tevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].DetId_tevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing DetId_tevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+
+        fits_get_colnum(bunchptr, CASEINSEN, "PixId_tevt", &colnum, &status);
+        if (status) {
+            LOG(ERROR) << "Error in getting column number for PixId_tevt column of L2 event file " << 
+                    bunchFile;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+        fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].PixId_tevt.data(), &status);
+        if (status) {
+            LOG(ERROR) << "Error in writing PixId_tevt COLUMN of " << bunchFile <<
+                    " for HDU " << hduname;
+            fits_report_error(stderr, status);
+            return (EXIT_FAILURE);
+        }
+
+
+//	detid[evt_row_num];
+//	pixid[evt_row_num]
 
 	}
     }

@@ -704,9 +704,11 @@ int L1evtData::extract_data(string TCTfilename) {
                     	    quadEventData.alpha.push_back(alpha);
 	                    quadEventData.detx.push_back(detx);
         	            quadEventData.dety.push_back(dety);
-                    quadEventData.dataID.push_back(dataID);
-                    quadEventData.modeID.push_back(modeID);
-                    quadEventData.quadID.push_back(quadID);
+                    	    quadEventData.dataID.push_back(dataID);
+                    	    quadEventData.modeID.push_back(modeID);
+                    	    quadEventData.quadID.push_back(quadID);
+			    quadEventData.DetId_fevt.push_back(detid);
+			    quadEventData.PixId_fevt.push_back(pixid);
 
 				nframe_bunch=1;
 
@@ -773,10 +775,12 @@ int L1evtData::extract_data(string TCTfilename) {
                     	    quadEventData.alpha.push_back(alpha);
 	                    quadEventData.detx.push_back(detx);
         	            quadEventData.dety.push_back(dety);
-                    quadEventData.dataID.push_back(dataID);
-                    quadEventData.modeID.push_back(modeID);
-                    quadEventData.quadID.push_back(quadID);
+                    	    quadEventData.dataID.push_back(dataID);
+                            quadEventData.modeID.push_back(modeID);
+                            quadEventData.quadID.push_back(quadID);
 
+			    quadEventData.DetId_sevt.push_back(detid);
+			    quadEventData.PixId_sevt.push_back(pixid);
 
 				nframe_bunch=2;
                 iEvent++;
@@ -812,6 +816,9 @@ int L1evtData::extract_data(string TCTfilename) {
                 	    quadEventData.dataID.push_back(dataID);
 	                    quadEventData.modeID.push_back(modeID);
                     	    quadEventData.quadID.push_back(quadID);
+
+			    quadEventData.DetId_tevt.push_back(detid);
+			    quadEventData.PixId_tevt.push_back(pixid);
 
 					nframe_bunch=0;
 				}
@@ -1160,7 +1167,7 @@ int QuadEvtData::reset() {
     quadID.clear(); 
    //clear bunches
     bunch_time.clear();
-   evt_row_num.clear(); 
+    evt_row_num.clear(); 
     time_dfs.clear();
     time_dsl.clear();
     num_bunchevents.clear();
@@ -1168,6 +1175,19 @@ int QuadEvtData::reset() {
     detid2.clear();
     detid3.clear();
     detid4.clear();
+
+
+//Ajay Vibhute, 21 May 2020
+	DetId_fevt.clear();
+	PixId_fevt.clear();
+	
+	DetId_sevt.clear();
+	PixId_sevt.clear();
+
+	DetId_tevt.clear();
+	PixId_tevt.clear();
+
+
     return EXIT_SUCCESS;
 }
 // QUADEVTDATA END

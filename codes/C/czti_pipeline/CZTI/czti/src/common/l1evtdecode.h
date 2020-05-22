@@ -228,8 +228,14 @@ public:
     vector <unsigned char>detid2;//Detector ID of event 4
     vector <unsigned char>detid3;//Detector ID of event 5
     vector <unsigned char>detid4;//Detector ID of event 6
-
-
+    //Ajay Vibhute, 21 May 
+    //For new noise reduction code adding additional information
+    vector <unsigned char>DetId_fevt;//Detector ID of first event
+    vector <unsigned char>PixId_fevt;//Pixel ID for first event
+    vector <unsigned char>DetId_sevt;//Detector ID of second event
+    vector <unsigned char>PixId_sevt;//Pixel ID for second event
+    vector <unsigned char>DetId_tevt;//Detector ID of third event
+    vector <unsigned char>PixId_tevt;//Pixel ID for third event
     //SETTERS
     int reset();
     
