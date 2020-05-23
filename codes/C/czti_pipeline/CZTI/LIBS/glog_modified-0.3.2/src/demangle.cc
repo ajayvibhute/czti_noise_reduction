@@ -157,7 +157,7 @@ typedef struct {
 // signal safe.
 static size_t StrLen(const char *str) {
   size_t len = 0;
-  while (*str != '\0') {
+  while (*str != NULL) {
     ++str;
     ++len;
   }
@@ -167,7 +167,7 @@ static size_t StrLen(const char *str) {
 // Returns true if "str" has at least "n" characters remaining.
 static bool AtLeastNumCharsRemaining(const char *str, int n) {
   for (int i = 0; i < n; ++i) {
-    if (str == '\0') {
+    if (str == NULL) {
       return false;
     }
   }
@@ -177,11 +177,11 @@ static bool AtLeastNumCharsRemaining(const char *str, int n) {
 // Returns true if "str" has "prefix" as a prefix.
 static bool StrPrefix(const char *str, const char *prefix) {
   size_t i = 0;
-  while (str[i] != '\0' && prefix[i] != '\0' &&
+  while (str[i] != NULL && prefix[i] != NULL &&
          str[i] == prefix[i]) {
     ++i;
   }
-  return prefix[i] == '\0';  // Consumed everything in "prefix".
+  return prefix[i] == NULL;  // Consumed everything in "prefix".
 }
 
 static void InitState(State *state, const char *mangled,
@@ -199,7 +199,7 @@ static void InitState(State *state, const char *mangled,
 
 // Returns true and advances "mangled_cur" if we find "one_char_token"
 // at "mangled_cur" position.  It is assumed that "one_char_token" does
-// not contain '\0'.
+// not contain NULL.
 static bool ParseOneCharToken(State *state, const char one_char_token) {
   if (state->mangled_cur[0] == one_char_token) {
     ++state->mangled_cur;
@@ -210,7 +210,7 @@ static bool ParseOneCharToken(State *state, const char one_char_token) {
 
 // Returns true and advances "mangled_cur" if we find "two_char_token"
 // at "mangled_cur" position.  It is assumed that "two_char_token" does
-// not contain '\0'.
+// not contain NULL.
 static bool ParseTwoCharToken(State *state, const char *two_char_token) {
   if (state->mangled_cur[0] == two_char_token[0] &&
       state->mangled_cur[1] == two_char_token[1]) {
@@ -223,11 +223,11 @@ static bool ParseTwoCharToken(State *state, const char *two_char_token) {
 // Returns true and advances "mangled_cur" if we find any character in
 // "char_class" at "mangled_cur" position.
 static bool ParseCharClass(State *state, const char *char_class) {
-  if (state->mangled_cur == '\0') {
+  if (state->mangled_cur == NULL) {
     return false;
   }
   const char *p = char_class;
-  for (; *p != '\0'; ++p) {
+  for (; *p != NULL; ++p) {
     if (state->mangled_cur[0] == *p) {
       ++state->mangled_cur;
       return true;
@@ -264,11 +264,11 @@ static bool ZeroOrMore(ParseFunc parse_func, State *state) {
 
 // Append "str" at "out_cur".  If there is an overflow, "overflowed"
 // is set to true for later use.  The output string is ensured to
-// always terminate with '\0' as long as there is no overflow.
+// always terminate with NULL as long as there is no overflow.
 static void Append(State *state, const char * const str, const int length) {
   int i;
   for (i = 0; i < length; ++i) {
-    if (state->out_cur + 1 < state->out_end) {  // +1 for '\0'
+    if (state->out_cur + 1 < state->out_end) {  // +1 for NULL
       *state->out_cur = str[i];
       ++state->out_cur;
     } else {
@@ -277,7 +277,7 @@ static void Append(State *state, const char * const str, const int length) {
     }
   }
   if (!state->overflowed) {
-    *state->out_cur = '\0';  // Terminate it with '\0'
+    *state->out_cur = NULL;  // Terminate it with NULL
   }
 }
 
@@ -300,7 +300,7 @@ static bool IsDigit(char c) {
 // a function clone suffix.
 static bool IsFunctionCloneSuffix(const char *str) {
   size_t i = 0;
-  while (str[i] != '\0') {
+  while (str[i] != NULL) {
     // Consume a single .<alpha>+.<digit>+ sequence.
     if (str[i] != '.' || !IsAlpha(str[i + 1])) {
       return false;
@@ -392,7 +392,7 @@ static void MaybeCancelLastSeparator(State *state) {
   if (state->nest_level >= 1 && state->append &&
       state->out_begin <= state->out_cur - 2) {
     state->out_cur -= 2;
-    *state->out_cur = '\0';
+    *state->out_cur = NULL;
   }
 }
 
@@ -635,7 +635,7 @@ static bool ParseNumber(State *state, int *number_out) {
   }
   const char *p = state->mangled_cur;
   int number = 0;
-  for (;*p != '\0'; ++p) {
+  for (;*p != NULL; ++p) {
     if (IsDigit(*p)) {
       number = number * 10 + (*p - '0');
     } else {
@@ -656,7 +656,7 @@ static bool ParseNumber(State *state, int *number_out) {
 // hexadecimal string.
 static bool ParseFloatNumber(State *state) {
   const char *p = state->mangled_cur;
-  for (;*p != '\0'; ++p) {
+  for (;*p != NULL; ++p) {
     if (!IsDigit(*p) && !(*p >= 'a' && *p <= 'f')) {
       break;
     }
@@ -672,7 +672,7 @@ static bool ParseFloatNumber(State *state) {
 // using digits and upper case letters
 static bool ParseSeqId(State *state) {
   const char *p = state->mangled_cur;
-  for (;*p != '\0'; ++p) {
+  for (;*p != NULL; ++p) {
     if (!IsDigit(*p) && !(*p >= 'A' && *p <= 'Z')) {
       break;
     }
@@ -1262,7 +1262,7 @@ static bool ParseSubstitution(State *state) {
     for (p = kSubstitutionList; p->abbrev != NULL; ++p) {
       if (state->mangled_cur[0] == p->abbrev[1]) {
         MaybeAppend(state, "std");
-        if (p->real_name[0] != '\0') {
+        if (p->real_name[0] != NULL) {
           MaybeAppend(state, "::");
           MaybeAppend(state, p->real_name);
         }
@@ -1279,7 +1279,7 @@ static bool ParseSubstitution(State *state) {
 // or version suffix.  Returns true only if all of "mangled_cur" was consumed.
 static bool ParseTopLevelMangledName(State *state) {
   if (ParseMangledName(state)) {
-    if (state->mangled_cur[0] != '\0') {
+    if (state->mangled_cur[0] != NULL) {
       // Drop trailing function clone suffix, if any.
       if (IsFunctionCloneSuffix(state->mangled_cur)) {
         return true;
