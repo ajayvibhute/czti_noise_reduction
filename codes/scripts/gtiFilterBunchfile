@@ -1,0 +1,36 @@
+#!/bin/bash
+
+## gtiFilterBunchfile: This bash script uses fselect utitlity from HEASOFT distribution
+## to filter the bunchfile with the GTI in the event file extensions
+
+## Pre-requisites: Heasoft initialize script executed in the current session (if not, add 
+## the 'heainit' command in this script)
+
+## Usage: gtiFilterBunchfile inputBunchfile OutputBunchfile eventfileWithGTI
+
+# Mithun N P S (30/05/20)
+
+if [ $# -ne 3 ]; then
+    echo "Missing input arguments"
+    echo "Usage: gtiFilterBunchfile inputBunchfile OutputBunchfile eventfileWithGTI"
+    exit 1
+fi
+
+inputBunchfile=$1
+OutputBunchfile=$2
+eventfileWithGTI=$3
+
+OutputBunchfile_QA=${OutputBunchfile}_QA
+fselect $inputBunchfile[Q0] $OutputBunchfile_QA "gtifilter('${eventfileWithGTI}[Q0_GTI]',TIME,'START','STOP')" clobber=yes
+
+OutputBunchfile_QB=${OutputBunchfile}_QB
+fselect $OutputBunchfile_QA[Q1] $OutputBunchfile_QB "gtifilter('${eventfileWithGTI}[Q1_GTI]',TIME,'START','STOP')" clobber=yes
+
+OutputBunchfile_QC=${OutputBunchfile}_QC
+fselect $OutputBunchfile_QB[Q2] $OutputBunchfile_QC "gtifilter('${eventfileWithGTI}[Q2_GTI]',TIME,'START','STOP')" clobber=yes
+
+fselect $OutputBunchfile_QC[Q3] $OutputBunchfile "gtifilter('${eventfileWithGTI}[Q3_GTI]',TIME,'START','STOP')" clobber=yes
+
+#Remove intermediate files
+rm $OutputBunchfile_QA $OutputBunchfile_QB $OutputBunchfile_QC
+
