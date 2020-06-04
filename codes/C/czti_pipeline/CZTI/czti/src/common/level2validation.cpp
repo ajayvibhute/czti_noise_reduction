@@ -1164,31 +1164,31 @@ int EventFileHandler::write_l2event_file(string l2eventFilename,string bunchFile
             return (EXIT_FAILURE);
         }
 
-	fits_get_colnum(bunchptr, CASEINSEN, "DetId_tevt", &colnum, &status);
+	fits_get_colnum(bunchptr, CASEINSEN, "DetId_levt", &colnum, &status);
         if (status) {
-            LOG(ERROR) << "Error in getting column number for DetId_tevt column of L2 event file " << 
+            LOG(ERROR) << "Error in getting column number for DetId_levt column of L2 event file " << 
                     bunchFile;
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
         }
         fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].DetId_tevt.data(), &status);
         if (status) {
-            LOG(ERROR) << "Error in writing DetId_tevt COLUMN of " << bunchFile <<
+            LOG(ERROR) << "Error in writing DetId_levt COLUMN of " << bunchFile <<
                     " for HDU " << hduname;
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
         }
 
-        fits_get_colnum(bunchptr, CASEINSEN, "PixId_tevt", &colnum, &status);
+        fits_get_colnum(bunchptr, CASEINSEN, "PixId_levt", &colnum, &status);
         if (status) {
-            LOG(ERROR) << "Error in getting column number for PixId_tevt column of L2 event file " << 
+            LOG(ERROR) << "Error in getting column number for PixId_levt column of L2 event file " << 
                     bunchFile;
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
         }
         fits_write_col(bunchptr, TBYTE, colnum, nrows+1,1,nrows_vec, quadEvtData[iquad].PixId_tevt.data(), &status);
         if (status) {
-            LOG(ERROR) << "Error in writing PixId_tevt COLUMN of " << bunchFile <<
+            LOG(ERROR) << "Error in writing PixId_levt COLUMN of " << bunchFile <<
                     " for HDU " << hduname;
             fits_report_error(stderr, status);
             return (EXIT_FAILURE);
