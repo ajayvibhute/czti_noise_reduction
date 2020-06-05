@@ -1,0 +1,7 @@
+infile,f,ql,"AS1G05_009T02_9000000618_04866cztM0_level2_trimmed_bc_nc_sbc.evt",,,"Enter input event file name"
+inbunchfile,f,ql,"AS1G05_009T02_9000000618_04866cztM0_level2_bunch_trimmed.fits",,,"Enter input bunch filename"
+caldb_lld_file,f,ql,"/home/user/software/caldb/data/as1/czti/bcf/AS1cztlld20170324v02.fits",,,"Enter input CALDB lld file name"
+thresholdfile,f,ql,"/home/user/software/ASTROSAT/czti_noise_reduction/noise_codes/config/heavyBunchThreshold.txt",,,"Enter heavy bunch cleaning threshold filename"
+outfile,f,ql,"AS1G05_009T02_9000000618_04866cztM0_level2_trimmed_bc_nc_sbc_hbc.evt",,,"Enter output filename"
+clobber,b,a,y,,,"Overwrite Existing file?(yes/no)"
+history,b,a,y,,,"Write history keywords in fits file?(yes/no)"

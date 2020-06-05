@@ -1,0 +1,6 @@
+infile,f,ql,"AS1A02_174T04_9000000938_06826cztM0_level2_bc.evt",,,"Enter input event file name"
+mkffile,f,ql,"/data2/czti/testarea/priyanka/noise_r_data/AS1A02_174T04_9000000938_06826czt_level2.mkf",,,"Enter mkf filename"
+thresholdfile,f,ql,"/home/cztipoc/czti_svn/trunk/users/mayuri/noise_codes/config/saaThreshold.txt",,,"Enter SAA threshold filename"
+outfile,f,ql,"AS1A02_174T04_9000000938_06826cztM0_level2_bc",,,"Enter output filename(without extension)"
+clobber,b,a,y,,,"Overwrite Existing file?(yes/no)"
+history,b,a,y,,,"Write history keywords in fits file?(yes/no)"

@@ -1,0 +1,5 @@
+bun_size_thresh 15
+heavy_bunch_time_threshold_LLD 0.2 
+heavy_bunch_time_threshold_all 0.005
+module_lld_threshold 10.0
+bunch_time_threshold_small 0.001

@@ -1,0 +1,5 @@
+infile,f,ql,"AS1G06_164T01_9000000896_06620cztM0_level2_bc_nc_sbc_hbc_fc.evt",,,"Enter input event file name"
+outfile_single,f,ql,"AS1G06_164T01_9000000896_06620cztM0_level2_bc_nc_sbc_hbc_fc_single.evt",,,"Enter output single event filename"
+outfile_double,f,ql,"AS1G06_164T01_9000000896_06620cztM0_level2_bc_nc_sbc_hbc_fc_double.evt",,,"Enter output double event filename"
+clobber,b,a,y,,,"Overwrite Existing file?(yes/no)"
+history,b,a,y,,,"Write history keywords in fits file?(yes/no)"

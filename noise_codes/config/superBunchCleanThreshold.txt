@@ -1,0 +1,6 @@
+heavy_bun_thresh_count_10ms 4
+heavy_bun_thresh_count_1ms 4
+bun_size_thresh 100
+dph_time 0.1
+thresh_hot 0.707
+allowable_hot_thresh 3.0
