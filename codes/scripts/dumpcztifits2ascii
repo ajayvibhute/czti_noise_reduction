@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# dumpcztifits2ascii: This bash script call fdump from ftools to write the FITS files 
+# of CZTI data (4 quadrants written as extensions 1-4 of the file) to an ascii output 
+# file
+
+# Usage: dumpcztifits2ascii inputFITSfile outputASCIIfileBasename
+# It will produce text files with outputASCIIfileBasename_Qn.txt
+
+# Mithun N P S (06/06/2020)
+
+
+if [ $# -ne 2 ]; then
+    echo "Missing input arguments"
+    echo "Usage: dumpcztifits2ascii inputFITSfile outputASCIIfileBasename"
+    echo "It will produce text files with outputASCIIfileBasename_Qn.txt"
+    exit 1
+fi
+
+inputfile=$1
+outputfile=$2
+
+for q in `seq 0 3`; do 
+
+    extid=$(($q + 1))
+
+    fout=${outputfile}_Q${q}.txt
+    echo Writing Q$q data to: $fout
+
+	fdump prhead=no prdata=yes wrap=yes more=yes pagewidth=256 clobber=yes showcol=yes showunit=no showrow=no align=yes infile=$inputfile[$extid] outfile=$fout columns='-' rows='-'
+    sed -i '3s/^/#/; 1,2d' $fout    ## Just to remove two additional rows at the top and to add # in header
+     
+done
+
