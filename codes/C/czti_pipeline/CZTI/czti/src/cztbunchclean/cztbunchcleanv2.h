@@ -29,6 +29,8 @@ private:
     char infile[PIL_LINESIZE];
 	char bunchfile[PIL_LINESIZE];
     char outfile[PIL_LINESIZE];
+    char outbunchfile[PIL_LINESIZE];
+    char outbunchevtfile[PIL_LINESIZE];
     char livetimefile[PIL_LINESIZE];
 	int bunchdeftime;
 	float skipT1,skipT2,skipT3;
@@ -36,6 +38,8 @@ private:
     int clobber;                      
     int history;
 	double livetime_binsize;
+    int outbunchevtstatus;
+    int bunchfileAddcolStatus;
 
 public:
 	cztbunchclean();
@@ -54,6 +58,6 @@ public:
 
 //Independant function
 int remove_events(char* infile,char* outfile,char *evt_flag,int qid,double **pixel_exposure);
-
+int write_bunch_events(char* infile,char* outfile,int *evt_index,int qid);
 
 #endif
