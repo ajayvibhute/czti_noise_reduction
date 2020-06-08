@@ -385,10 +385,10 @@ int cztbunchclean::cztbunchcleanProcess()
         
             fits_get_colnum(fbunch,CASEINSEN,"DetId_fevt",&DetId_fevt_col,&status);
             fits_get_colnum(fbunch,CASEINSEN,"DetId_sevt",&DetId_sevt_col,&status);
-            fits_get_colnum(fbunch,CASEINSEN,"DetId_tevt",&DetId_tevt_col,&status);
+            fits_get_colnum(fbunch,CASEINSEN,"DetId_levt",&DetId_tevt_col,&status);
             fits_get_colnum(fbunch,CASEINSEN,"PixId_fevt",&PixId_fevt_col,&status);
             fits_get_colnum(fbunch,CASEINSEN,"PixId_sevt",&PixId_sevt_col,&status);
-            fits_get_colnum(fbunch,CASEINSEN,"PixId_tevt",&PixId_tevt_col,&status);
+            fits_get_colnum(fbunch,CASEINSEN,"PixId_levt",&PixId_tevt_col,&status);
         
             bunchfileAddcolStatus=1;
         }
