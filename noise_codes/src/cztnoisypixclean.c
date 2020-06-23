@@ -1186,6 +1186,7 @@ void writeLivetime(double *time,float *livetime,int livetimesize,char *outputfil
 	return;
 }
 
+/*
 void modifyEventHeaderParams(char *outputfile)
 {
 	
@@ -1240,7 +1241,76 @@ void modifyEventHeaderParams(char *outputfile)
 	        printerror( status );
 
 	return;
+} */
+
+void modifyEventHeaderParams(char *outputfile)
+{
+	
+	fitsfile *fptrOut;  
+	int status,i,tstarti,tstopi;
+	double tstart,tstop,start[4],stop[4],largest,smallest,texposure, exposure[4],tstartf,tstopf;
+	status=0;
+	double smallest_exposure;
+	char *comment; 
+
+	if ( fits_open_file(&fptrOut, outputfile, READWRITE, &status) ) 
+	         printerror( status );
+
+    	for(i=0;i<4;i++)
+    	{       
+		fits_movabs_hdu(fptrOut, i+2, NULL, &status);
+		fits_read_key(fptrOut,TDOUBLE,"TSTART",&tstart,NULL, &status);
+		fits_read_key(fptrOut,TDOUBLE,"TSTOP",&tstop,NULL, &status);
+		fits_read_key(fptrOut,TDOUBLE,"EXPOSURE",&texposure,NULL, &status);
+		
+		start[i]=tstart;
+		stop[i]=tstop;
+		exposure[i] = texposure;
+	}
+
+	smallest_exposure = exposure[0];
+	for (i = 1; i < 4; i++)
+		if (smallest_exposure > exposure[i])
+			smallest_exposure = exposure[i];
+
+
+	smallest = start[0];
+	for (i = 1; i < 4; i++)
+		if (smallest > start[i])
+			smallest = start[i];
+
+	largest = stop[0];
+	for (i = 1; i < 4; i++)
+		if (largest < stop[i])
+			largest = stop[i];
+			
+	
+
+	if ( fits_movabs_hdu(fptrOut, 1, NULL, &status) ) 
+	      	printerror( status );
+	tstarti=(int)smallest;
+	tstopi=(int)largest;
+
+	tstartf=smallest-tstarti;
+	tstopf=largest-tstopi;
+	//exposure=largest-smallest;
+	printf("Time : %f\t%f\t%d\t%d\t%10f\t%10f\n",smallest,largest,tstarti,tstopi,tstartf,tstopf);
+	
+	fits_update_key(fptrOut, TDOUBLE,"TSTART",&smallest,"Start time of observation",&status);
+	fits_update_key(fptrOut, TDOUBLE,"TSTOP",&largest,"Stop time of observation",&status);
+	fits_update_key(fptrOut, TINT,"TSTARTI", &tstarti,"Start time of observation Integer part", &status);
+	fits_update_key(fptrOut, TINT,"TSTOPI", &tstopi,"Stop time of observation Integer part", &status);
+	fits_update_key(fptrOut, TDOUBLE,"TSTARTF", &tstartf,"Start time of observation Fractional part", &status);
+	fits_update_key(fptrOut, TDOUBLE,"TSTOPF", &tstopf,"Stop time of observation Fractional part", &status);
+	fits_update_key(fptrOut, TDOUBLE,"EXPOSURE", &smallest_exposure,"Exposure time", &status);
+	
+	if ( fits_close_file(fptrOut, &status) )       
+	        printerror( status );
+
+	return;
 }
+
+
 void writegtiextension(double *gtistart, double *gtistop, double gtinrows,char *outputfile, int hdunum, double tstart, double tstop, double exposure)
 {
 	fitsfile *fptrOut; 
