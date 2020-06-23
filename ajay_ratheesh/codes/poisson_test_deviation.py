@@ -128,6 +128,7 @@ def run_poisson_data_test(**kwargs):
 		
 			binhist = np.arange(0,40,1)
 			hist_curr ,bin_e = np.histogram(time_evt_lc, bins=binhist)
+			hist_curr[0] = hist_curr[0] - num_of_expected_zeros
 			hist_total = np.add(hist_total,hist_curr)
 			bin_e = np.delete(bin_e,len(bin_e)-1)
 			sum_0 = sum_0+np.sum(time_evt_lc)
@@ -176,10 +177,13 @@ def run_poisson_data_test(**kwargs):
 	diff = 0
 	#~ outfile.write("READ SERR 2\n")
 	for i in range(0,len(bin_e)):
+		outfile.write(str(bin_e[i])+"\t"+str(hist_total[i])+"\t"+str(np.sqrt(hist_total[i]))+"\t"+str(hist_exp_total[i])+"\n")
+		if i==0:
+			continue
 		if float(hist_total[i])-float(hist_exp_total[i]) > 0:
 			diff = diff + float(hist_total[i])-float(hist_exp_total[i])
 	
-		outfile.write(str(bin_e[i])+"\t"+str(hist_total[i])+"\t"+str(np.sqrt(hist_total[i]))+"\t"+str(hist_exp_total[i])+"\n")
+		
 
 
 	print ("Noise counts = "+str(diff))
