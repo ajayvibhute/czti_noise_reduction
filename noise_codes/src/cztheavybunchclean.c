@@ -24,7 +24,7 @@
 void processHeavyBunchClean();
 void printerror( int status);
 void createEventFile(char *outputfile,char *infile);
-void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int bufsize,int hdunum);
+void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int bufsize,int hdunum,double exposure);
 void modifyEventHeaderParams(char *outputfile);
 void modifyExposure(char *outputfile, double **pix_exposure,int qid);
 
@@ -719,7 +719,7 @@ void processHeavyBunchClean()
 					//if((evttime[j]>=buntime_heavy[i] && evttime[j]<=buntime_heavy[i]+heavy_bunch_time_threshold_all) && (bundet_heavy[i]==detid[j]))
 					if((evttime[j]>=buntime_heavy[i] && evttime[j]<=buntime_heavy[i]+heavy_bunch_time_threshold_all) && (( detx_min <= detx[j] && detx_max >= detx[j]) && ( dety_min <= dety[j] && dety_max >= dety[j])))
 					{
-						if(evttime[j]-buntime_heavy[i+1]<0.0){prev =j;}
+						if(evttime[j]-buntime_heavy[i+1] <0.0){prev =j;}
 						event_flag[j]=1;
 					}
 					if(evttime[j]-buntime_heavy[i] > 1.0){break;}
@@ -774,9 +774,6 @@ void processHeavyBunchClean()
 					detx_max = 63;
 				
 				}
-				
-				
-				
 				
 				for(m=detx_min;m <= detx_max;m++)
 				{
@@ -915,7 +912,7 @@ void processHeavyBunchClean()
 				fprintf(logfile,"%d\t%d\t%lf\t%f\t%u\t%u\t%u\t%u\t%f\n",i,qid,evttime[i],energy[i],detx[i],dety[i],detid[i],pixid[i],LLD_thresh[detx[i]][dety[i]]-module_lld_threshold);
 		
 		}
-		writeEvent(finalevttime,finalcztseccnt,finalcztntick,finalpha,finaldetid,finalpixid,finaldetx,finaldety,finalveto,finalalpha,finalpi,finalenergy,outfile,l,qid+2);
+		writeEvent(finalevttime,finalcztseccnt,finalcztntick,finalpha,finaldetid,finalpixid,finaldetx,finaldety,finalveto,finalalpha,finalpi,finalenergy,outfile,l,qid+2,tot_exposure);
 		
 		free(buntime_heavy);free(buntime_small);
 		free(bundet_small);free(bundet_heavy);
@@ -1162,7 +1159,7 @@ void createEventFile(char *outputfile,char *eventfile)
 	return;
 }
 
-void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum)
+void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure)
 {
 	fitsfile *fptrOut;       
 	int status, hdutype,intnull;
@@ -1171,7 +1168,7 @@ void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,uns
 	unsigned char bytenull;
 	status=0;
 	int tstarti,tstopi;
-	double tstart,tstop,tstartf,tstopf,exposure;
+	double tstart,tstop,tstartf,tstopf;//,exposure;
 
 	if ( fits_open_file(&fptrOut, outputfile, READWRITE, &status) ) 
 	{
@@ -1190,7 +1187,7 @@ void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,uns
 
 	tstartf=tstart-tstarti;
 	tstopf=tstop-tstopi;
-	exposure=tstop-tstart;
+	//exposure=tstop-tstart;
 
 	frow      = 1;
 	felem     = 1;
@@ -1229,8 +1226,9 @@ void modifyEventHeaderParams(char *outputfile)
 	
 	fitsfile *fptrOut;  
 	int status,i,tstarti,tstopi;
-	double tstart,tstop,start[4],stop[4],largest,smallest,exposure,tstartf,tstopf;
+	double tstart,tstop,start[4],stop[4],largest,smallest,texposure, exposure[4],tstartf,tstopf;
 	status=0;
+	double smallest_exposure;
 	char *comment; 
 
 	if ( fits_open_file(&fptrOut, outputfile, READWRITE, &status) ) 
@@ -1241,10 +1239,18 @@ void modifyEventHeaderParams(char *outputfile)
 		fits_movabs_hdu(fptrOut, i+2, NULL, &status);
 		fits_read_key(fptrOut,TDOUBLE,"TSTART",&tstart,NULL, &status);
 		fits_read_key(fptrOut,TDOUBLE,"TSTOP",&tstop,NULL, &status);
+		fits_read_key(fptrOut,TDOUBLE,"EXPOSURE",&texposure,NULL, &status);
 		
 		start[i]=tstart;
 		stop[i]=tstop;
+		exposure[i] = texposure;
 	}
+
+	smallest_exposure = exposure[0];
+	for (i = 1; i < 4; i++)
+		if (smallest_exposure > exposure[i])
+			smallest_exposure = exposure[i];
+
 
 	smallest = start[0];
 	for (i = 1; i < 4; i++)
@@ -1255,6 +1261,8 @@ void modifyEventHeaderParams(char *outputfile)
 	for (i = 1; i < 4; i++)
 		if (largest < stop[i])
 			largest = stop[i];
+			
+	
 
 	if ( fits_movabs_hdu(fptrOut, 1, NULL, &status) ) 
 	      	printerror( status );
@@ -1263,7 +1271,7 @@ void modifyEventHeaderParams(char *outputfile)
 
 	tstartf=smallest-tstarti;
 	tstopf=largest-tstopi;
-	exposure=largest-smallest;
+	//exposure=largest-smallest;
 	printf("Time : %f\t%f\t%d\t%d\t%10f\t%10f\n",smallest,largest,tstarti,tstopi,tstartf,tstopf);
 	
 	fits_update_key(fptrOut, TDOUBLE,"TSTART",&smallest,"Start time of observation",&status);
@@ -1272,7 +1280,7 @@ void modifyEventHeaderParams(char *outputfile)
 	fits_update_key(fptrOut, TINT,"TSTOPI", &tstopi,"Stop time of observation Integer part", &status);
 	fits_update_key(fptrOut, TDOUBLE,"TSTARTF", &tstartf,"Start time of observation Fractional part", &status);
 	fits_update_key(fptrOut, TDOUBLE,"TSTOPF", &tstopf,"Stop time of observation Fractional part", &status);
-	fits_update_key(fptrOut, TDOUBLE,"EXPOSURE", &exposure,"Exposure time", &status);
+	fits_update_key(fptrOut, TDOUBLE,"EXPOSURE", &smallest_exposure,"Exposure time", &status);
 	
 	if ( fits_close_file(fptrOut, &status) )       
 	        printerror( status );
