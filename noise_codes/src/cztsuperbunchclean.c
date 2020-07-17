@@ -584,8 +584,10 @@ void processSuperBunchClean()
 						n_hot_pix=n_hot_pix+dph_hot[k][m];
 					}
 				}
-	
-				allowable_hot = total_hotness/n_hot_pix;
+				
+				if (n_hot_pix!=0.0){
+				allowable_hot = total_hotness/n_hot_pix;}
+				else allowable_hot =0.0;
 				//need to change(orbit no)
 				//fprintf(f1,"%d\t%f\t%f\t%f\t%f\t%s\n",bunch_size,allowable_hot,total_hotness,n_hot_pix,n_pair,orbitno);
 				fprintf(f1,"%f\t%f\t%f\t%f\t%d\n",allowable_hot,total_hotness,n_hot_pix,n_pair,qid);
@@ -675,7 +677,7 @@ void processSuperBunchClean()
 		{
 			if( gtitstart[i] >= gtitstop[i])
 			{
-				printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
+				printf("5---GTI ERROR PRESENT in Quadrant %d\n",qid);
 			}
 			
 			
@@ -867,7 +869,7 @@ void processSuperBunchClean()
 		//printf("GTI duration = %d\n",gti_counter);
 		for(i=0;i<gti_counter;i++)
 		{
-			if(gtitstart_sel[i] >= gtitstop_sel[i])
+			if(gtitstart_sel[i] > gtitstop_sel[i])
 			{
 				printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
 			}
@@ -881,7 +883,7 @@ void processSuperBunchClean()
 			for(j=0;j<ii;j++)
 			{
 				
-				if(GTITSTART_merge[j] >= GTITSTOP_merge[j])
+				if(GTITSTART_merge[j] > GTITSTOP_merge[j])
 				{
 					printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
 				}
@@ -1118,7 +1120,7 @@ void processSuperBunchClean()
 			
 			for(j=0;j<gtinrows_f;j++)
 			{
-				if(gtitstart_f[j] >= gtitstop_f[j])
+				if(gtitstart_f[j] > gtitstop_f[j])
 				{
 					printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
 					//printf("%lf \t %lf \n",gtitstart_f[j],gtitstop_f[j]);
