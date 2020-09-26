@@ -237,10 +237,10 @@ void processFlickPixReduction()
 		fits_movabs_hdu(badpixfptr, qid+2, NULL, &status);
 		fits_get_num_rows(badpixfptr, &badpixnrows, &status);
 
-		bpdetid  = (unsigned char*)realloc(bpdetid,badpixnrows * sizeof(unsigned char));
-		bppixid  =(unsigned char*) realloc(bppixid,badpixnrows * sizeof(unsigned char));
-		bpdetx  = (unsigned char*)realloc(bpdetx,badpixnrows * sizeof(unsigned char));
-		bpdety  = (unsigned char*)realloc(bpdety,badpixnrows * sizeof(unsigned char));
+		bpdetid  	= (unsigned char*)realloc(bpdetid,badpixnrows * sizeof(unsigned char));
+		bppixid  	=(unsigned char*) realloc(bppixid,badpixnrows * sizeof(unsigned char));
+		bpdetx 		= (unsigned char*)realloc(bpdetx,badpixnrows * sizeof(unsigned char));
+		bpdety 		= (unsigned char*)realloc(bpdety,badpixnrows * sizeof(unsigned char));
 		bppix_flag  = (unsigned char*)realloc(bppix_flag,badpixnrows * sizeof(unsigned char));
 
 		fits_read_col(badpixfptr, TBYTE, 1, frow, felem,badpixnrows, &bytenull, bpdetid, &anynull, &status);  
@@ -456,7 +456,10 @@ void processFlickPixReduction()
 		double tot_exposure;
 		
 		fits_read_key(evtfptr,TDOUBLE,"EXPOSURE",&tot_exposure,NULL, &status);
-		fits_movabs_hdu(evtfptr,14, NULL, &status);
+		//~ fits_movabs_hdu(evtfptr,14, NULL, &status);
+		fits_movnam_hdu(evtfptr, BINARY_TBL, "EXPOSURE", 0, &status);
+		
+		
 		fits_read_col(evtfptr, TDOUBLE, qid+1, frow, felem, 4096, &doublenull, pixel_exposure[qid],&anynull, &status);
 	
 		for(j=0;j<numbin_100s;j++)
@@ -474,7 +477,7 @@ void processFlickPixReduction()
 		
 		for(i=0;i<4096;i++)
 		{	
-			//printf("%d\n",numbin_100s);
+			//printf("%f\n",pixel_exposure[qid][i]);
 			pix_mean_lt=0.0;
 			pix_sd_lt=0.0;
 			ignore_pix_lt=0;
@@ -619,12 +622,13 @@ void processFlickPixReduction()
 		
 		printf("No of valid pixels = %d   No of flickering pixels excluded = %d\n",valid_pix_counter,valid_pix_counter_temp);
 			
-
+	printf("Reached here 1");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		double bintime;
-		int tempind1=0,tempind2;
+		int tempind1=0,tempind2,jj=0;
+		/*
 		for(bintime=evttime[0];bintime< evttime[evtnrows-1];bintime+=1.0)
 		{
 			//printf("%lf\n",bintime);
@@ -646,7 +650,7 @@ void processFlickPixReduction()
 					tempind1=j;
 					
 				}
-				if(evttime[j]-bintime >= 10.0){break;}
+				if(evttime[j]-bintime >= 3.0){break;}
 			}
 			//if(qid==1){printf("%d\t%d\n",flick_detpixid_1s[230], flick_all_1s++);}
 			flick_pix_counter_1s=0;
@@ -654,16 +658,16 @@ void processFlickPixReduction()
 			//if(bintime>211223974.15 && bintime<211223990.15)
 			//printf("flick_thresh_1s : %d\n",flick_thresh_1s);
 
-			for(j=0;j<4096;j++)
+			for(jj=0;jj<4096;jj++)
 			{
 
 				//if(qid==1 && j==230){ printf("%d\t%d\n",flick_detpixid_1s[230], flick_thresh_1s);}
-				if(flick_detpixid_1s[j]>flick_thresh_1s)
+				if(flick_detpixid_1s[jj]>flick_thresh_1s)
 				{
 					
-					pixel_badtime[qid][j] = pixel_badtime[qid][j]+1.0; 
+					pixel_badtime[qid][jj] = pixel_badtime[qid][jj]+1.0; 
 					//flick_pix_time_1s[flick_pix_counter_1s]=bintime;
-					flick_pix_1s[flick_pix_counter_1s]=j;
+					flick_pix_1s[flick_pix_counter_1s]=jj;
 					//if(qid==1 && j==230){printf("1    %d\t%lf\n",j,flick_pix_time_1s[flick_pix_counter_1s]);}
 					flick_pix_counter_1s++;
 					
@@ -675,7 +679,7 @@ void processFlickPixReduction()
 			//if(flick_pix_counter_1s>0) printf("%d\t%d\t1\t%d\n",flick_pix_counter_1s,flick_thresh_1s,qid);
 			for(k=0;k<flick_pix_counter_1s;k++)
 			{
-				for(j=0;j<evtnrows;j++)
+				for(j=tempind2;j<evtnrows;j++)
 				{
 					//if(qid==1 && detpixid[j]==230 && flick_pix_1s[k]==230){ printf("True %d\t%lf\n",flick_pix_1s[k],flick_pix_time_1s[k]);}
 					
@@ -688,7 +692,7 @@ void processFlickPixReduction()
 						//break;
 
 					}
-					if(evttime[j]-bintime >= 10.0){break;}
+					if(evttime[j]-bintime >= 3.0){break;}
 				}
 		
 				btipixid[k]=flick_pix_1s[k]/256;
@@ -711,9 +715,13 @@ void processFlickPixReduction()
 			
 		}
 		
+		*/
+		
+		printf("Reached here 2");
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		tempind1=0;tempind2=0;
+		/*
+		tempind1=0;tempind2=0,jj=0;
 		for(bintime=evttime[0];bintime<evttime[evtnrows-1];bintime+=10.0)
 		{
 			//printf("%lf\n",bintime);
@@ -738,33 +746,31 @@ void processFlickPixReduction()
 					tempind1=j;
 					
 				}
-				if(evttime[j]-bintime >= 100.0){break;}
+				if(evttime[j]-bintime >= 15.0){break;}
 			}
 			flick_pix_counter_10s=0;
 			flick_thresh_10s = pixThresholdFix(flick_all_10s,valid_pix_counter);
 			//if(bintime>211223974.15 && bintime<211223990.15)
 			//printf("flick_thresh_10s : %d\n",flick_thresh_10s);
 
-			for(j=0;j<4096;j++)
+			for(jj=0;jj<4096;jj++)
 			{
-				if(flick_detpixid_10s[j]>flick_thresh_10s)
+				if(flick_detpixid_10s[jj]>flick_thresh_10s)
 				{
 					
-					pixel_badtime[qid][j] = pixel_badtime[qid][j]+10.0;
+					pixel_badtime[qid][jj] = pixel_badtime[qid][jj]+10.0;
 					flick_pix_time_10s[flick_pix_counter_10s]=bintime;
-					flick_pix_10s[flick_pix_counter_10s]=j;
+					flick_pix_10s[flick_pix_counter_10s]=jj;
 					//if(qid==1 && i/256==0 && i%256==230){printf("10    %d\t%lf\n",j,flick_pix_time_10s[flick_pix_counter_10s]);}
-					
 					flick_pix_counter_10s++;
 					
 				}
-
-
 			}
+			
 			//if(flick_pix_counter_10s>0) printf("%d\t%d\t10\t%d\n",flick_pix_counter_10s,flick_thresh_10s,qid);
 			for(k=0;k<flick_pix_counter_10s;k++)
 			{
-				for(j=0;j<evtnrows;j++)
+				for(j=tempind2;j<evtnrows;j++)
 				{
 					
 					if((evttime[j]>=flick_pix_time_10s[k] && evttime[j]<flick_pix_time_10s[k]+10.0) && detpixid[j]== flick_pix_10s[k])
@@ -775,7 +781,7 @@ void processFlickPixReduction()
 						//break;
 
 					}
-					if(evttime[j]-flick_pix_time_10s[k] >= 100.0){break;}
+					if(evttime[j]-flick_pix_time_10s[k] >= 15.0){break;}
 				}
 				btipixid[k]=flick_pix_10s[k]/256;
 				btidetid[k]=flick_pix_10s[k]%256;
@@ -793,9 +799,9 @@ void processFlickPixReduction()
 			
 			writeBTI(btidetid,btipixid,btidetx,btidety,btitstart,btitstop,flick_pix_counter_10s,outbtifile,qid+2);
 				
-		}
+		} */
 		
-	
+		printf("Reached here 3");
 		
 		int l=0;
 		fprintf(logfile,"Events removed after flickering pixels detection\nIndex\tTime\tDETX\tDETY\n");
@@ -827,12 +833,15 @@ void processFlickPixReduction()
 			
 		for(i=0;i<4096;i++)
 		{
+			printf("%f\n",pixel_exposure[qid][i]);
 			if(pixel_exposure[qid][i]==0.0){continue;}
+			
 			
 			else
 			{
 				pixel_exposure[qid][i] = (tot_exposure*pixel_exposure[qid][i]-pixel_badtime[qid][i])/tot_exposure;
 			}
+			
 				
 		}	
 			
@@ -855,7 +864,7 @@ void processFlickPixReduction()
 		free(gtitstart);free(gtitstop);
 		free(lc_lt);free(lc_gt);free(flivetime);
 	}
-	modifycommonGTI(outfile);
+	//~ modifycommonGTI(outfile);
 	modifyEventHeaderParams(outfile);
 	writeBadpixExtension(outbadpixfile);
 	
@@ -1090,10 +1099,11 @@ void createEventFile(char *outputfile,char *eventfile)
 	
 
 	
-	if ( fits_create_tbl( fptrOut, BINARY_TBL, 0, tfields_gti, ttype_gti, tform_gti,tunit_gti, extname, &status) )
-			printerror( status );
-	if(fits_movabs_hdu(fptrOut,9, 0, &status)) 
-		printerror( status );
+	//~ if ( fits_create_tbl( fptrOut, BINARY_TBL, 0, tfields_gti, ttype_gti, tform_gti,tunit_gti, extname, &status) )
+			//~ printerror( status );
+	//~ if(fits_movabs_hdu(fptrOut,9, 0, &status)) 
+		//~ printerror( status );
+		
 	
 	// Copy Q0_GTI
 	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "Q0_GTI", 0, &status)) 
@@ -1147,8 +1157,10 @@ void createEventFile(char *outputfile,char *eventfile)
 	if ( fits_create_tbl( fptrOut, BINARY_TBL, 0, tfields_exp, ttype_exp, tform_exp,tunit_exp, extname, &status) )
 	printerror( status );
 		
-	if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
-	         	printerror( status );
+	//~ if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	         	//~ printerror( status );
+	if ( fits_movnam_hdu(fptrOut, BINARY_TBL, "EXPOSURE", 0, &status) ) 
+	      	printerror( status );
 
 	if ( fits_close_file(fptrOut, &status) )       
 	        printerror( status );
@@ -1580,8 +1592,14 @@ void modifyExposure(char *outputfile, double **pix_exposure,int qid)
 	        printerror( status );
 	        
 	
-	if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	//~ if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	      	//~ printerror( status );
+	      	
+	if ( fits_movnam_hdu(fptrOut, BINARY_TBL, "EXPOSURE", 0, &status) ) 
 	      	printerror( status );
+	      	
+	      	
+	      	
 		   	
 	fits_write_col(fptrOut, TDOUBLE, qid+1, frow, felem,4096,pix_exposure[qid],&status);
 	

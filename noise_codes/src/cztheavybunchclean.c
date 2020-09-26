@@ -846,7 +846,11 @@ void processHeavyBunchClean()
 		felem     = 1;
 		doublenull = 0.;
 		
-		fits_movabs_hdu(evtfptr,14, NULL, &status);
+		//~ fits_movabs_hdu(evtfptr,14, NULL, &status);
+		fits_movnam_hdu(evtfptr, BINARY_TBL, "EXPOSURE", 0, &status);
+		
+		
+		
 		fits_read_col(evtfptr, TDOUBLE, qid+1, frow, felem, 4096, &doublenull, pixel_exposure[qid],&anynull, &status);
 		
 		
@@ -921,7 +925,7 @@ void processHeavyBunchClean()
 		printf("Q%d End\n",qid);
 	}
 	modifyEventHeaderParams(outfile);
-		
+
 	free(evttime);free(cztseccnt);free(finalevttime);free(finalcztseccnt);free(bunchtime);
 	free(cztntick);free(veto);free(finalcztntick);free(finalveto);free(pha);free(finalpha);
 	free(detid);free(pixid);free(detx);free(dety);free(alpha);free(finaldetid);free(finalpixid);
@@ -941,7 +945,7 @@ void processHeavyBunchClean()
 
 	for(i=0;i<4;i++) free(pixel_exposure[i]);
 	free(pixel_exposure);
-	
+
 	if ( fits_close_file(caldbfptr, &status) )       
 	        printerror( status );
 
@@ -1093,11 +1097,11 @@ void createEventFile(char *outputfile,char *eventfile)
 		printerror( status );
 
 	// Copy GTI
-	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
-		printerror( status );         
+	//~ if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
+		//~ printerror( status );         
 
-	if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
-		printerror( status );
+	//~ if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
+		//~ printerror( status );
 
 	// Copy Q0_GTI
 	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "Q0_GTI", 0, &status)) 
@@ -1147,8 +1151,10 @@ void createEventFile(char *outputfile,char *eventfile)
 	if ( fits_create_tbl( fptrOut, BINARY_TBL, 0, tfields_exp, ttype_exp, tform_exp,tunit_exp, extname, &status) )
 	printerror( status );
 		
-	if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
-	         	printerror( status );
+	//~ if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	         	//~ printerror( status );
+	if(fits_movnam_hdu(fptrOut, BINARY_TBL, extname , 0, &status)) 
+		printerror( status );  
 
 	if ( fits_close_file(fptrOut, &status) )       
 	        printerror( status );
@@ -1282,6 +1288,7 @@ void modifyEventHeaderParams(char *outputfile)
 	fits_update_key(fptrOut, TDOUBLE,"TSTOPF", &tstopf,"Stop time of observation Fractional part", &status);
 	fits_update_key(fptrOut, TDOUBLE,"EXPOSURE", &smallest_exposure,"Exposure time", &status);
 	
+	
 	if ( fits_close_file(fptrOut, &status) )       
 	        printerror( status );
 
@@ -1309,7 +1316,10 @@ void modifyExposure(char *outputfile, double **pix_exposure,int qid)
 	
 	if ( fits_open_file(&fptrOut, outputfile, READWRITE, &status) ) 
 	        printerror( status );
-	if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	        
+	//~ if ( fits_movabs_hdu(fptrOut, 14, &hdutype, &status) ) 
+	      	//~ printerror( status );
+	if ( fits_movnam_hdu(fptrOut, BINARY_TBL, "EXPOSURE", 0, &status) ) 
 	      	printerror( status );
 	      	
 	fits_write_col(fptrOut, TDOUBLE, qid+1, frow, felem,4096,pix_exposure[qid],&status);

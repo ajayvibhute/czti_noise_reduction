@@ -33,7 +33,8 @@ void livetimeGeneration(double *live_time_UT,int live_counter,char *outputfile,i
 void modifyEventHeaderParams(char *outputfile);
 void writeBTItime(double *time_1,double *time_2,int BTIsize,int hdunum);
 void createBTIFile();
-void writegtiextension(double *gtistart, double *gtistop, double gtinrows, int hdunum, double tstart, double tstop, double exposure);
+void writegtiextension(double *gtistart, double *gtistop, double gtinrows, char extention_name[20], double tstart, double tstop, double exposure);
+//~ void writegtiextension(double *gtistart, double *gtistop, double gtinrows, int hdunum, double tstart, double tstop, double exposure);
 //void livetimeGeneration(double *live_time_UT,int live_counter,char *outputfile,int hdunum,double *lttime,double *fracexp,int livetimenrows,double tstart,double tstop);
 
 int display_input_parameters(char *infile, char *inbunchfile, char *thresholdfile,char *inlivetimefile,char *outlivetimefile,char *outbtifile,char *outfile,int clobber,int history);
@@ -115,6 +116,7 @@ void processSuperBunchClean()
 	double *lttime,*fracexp;
 	int BTI_counter=0;
 	int BTItimesize;
+	char extname[20]; 
 	double *BTITSTART, *BTITSTOP;
 
 		evttime=(double*)malloc(sizeof(double)*size);
@@ -631,7 +633,10 @@ void processSuperBunchClean()
 		//fits_read_key(fevt,TDOUBLE,"TSTOP",&tstop,NULL, &status);
 		
 		
-		fits_movabs_hdu(fevt, qid+10, &hdutype, &status);
+		//~ fits_movabs_hdu(fevt, qid+10, &hdutype, &status);
+		sprintf(extname, "Q%d_GTI",qid);
+		fits_movnam_hdu(fevt, BINARY_TBL, extname, 0, &status);
+		
 		
 		
 		fits_get_num_rows(fevt, &qgtinrows, &status);
@@ -677,7 +682,7 @@ void processSuperBunchClean()
 		{
 			if( gtitstart[i] >= gtitstop[i])
 			{
-				printf("5---GTI ERROR PRESENT in Quadrant %d\n",qid);
+				printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
 			}
 			
 			
@@ -864,7 +869,7 @@ void processSuperBunchClean()
 		gtitstop_f=(double*)calloc(gtinrows_est,sizeof(double));
 		
 		
-		printf("GTI____%ld %d\n",gti_counter,ii);
+		//printf("GTI____%ld %d\n",gti_counter,ii);
 		
 		//printf("GTI duration = %d\n",gti_counter);
 		for(i=0;i<gti_counter;i++)
@@ -1059,9 +1064,7 @@ void processSuperBunchClean()
 		
 			for(j=temp_ind;j<evtnrows;j++)
 			{
-				
-				
-				
+					
 				if(evttime[j] >= BTI_exclude_TSTART[i] && evttime[j] < BTI_exclude_TSTOP[i])
 				{
 					evt_flag[j] = 1;
@@ -1205,7 +1208,8 @@ void processSuperBunchClean()
 		
 		
 		
-		writegtiextension(gtitstart_final, gtitstop_final,gtinrows_final,qid+10,tstart,tstop,exposure);
+		//~ writegtiextension(gtitstart_final, gtitstop_final,gtinrows_final,qid+10,tstart,tstop,exposure);
+		writegtiextension(gtitstart_final, gtitstop_final,gtinrows_final,extname,tstart,tstop,exposure);
 		
 		
 		
@@ -1276,7 +1280,7 @@ void processSuperBunchClean()
 
 	}//qid end
 	modifyEventHeaderParams(outfile);
-	modifyEventHeaderParams(outlivetimefile);
+	//modifyEventHeaderParams(outlivetimefile);
 	//free memory
 	free(evttime);free(evtcztseccnt);free(finalevttime);free(finalcztseccnt);
 	free(evtcztntick);free(evtveto);free(finalcztntick);free(finalveto);free(evtpha);free(finalpha);
@@ -1442,7 +1446,7 @@ void createEventFile(char *eventfile)
 
 	//if ( fits_open_file(&fptrOut, outfile, READWRITE, &status) ) 
 	  //      printerror( status );
-
+	
 	status=0;
 	
 	if ( fits_open_file(&fptrevt,eventfile, READONLY, &status) ) 
@@ -1555,11 +1559,14 @@ void createEventFile(char *eventfile)
 		printerror( status );
 
 	// Copy GTI
-	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
-		printerror( status );         
+	//~ if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
+		//~ printerror( status );         
 
-	if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
-		printerror( status );
+	//~ if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
+		//~ printerror( status );
+		
+		
+		
 	/*
 	// Copy Q0_GTI
 	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "Q0_GTI", 0, &status)) 
@@ -1597,15 +1604,26 @@ void createEventFile(char *eventfile)
 		
 		status=0;
 		sprintf(extname, "Q%d_GTI",i);
-		if(fits_movabs_hdu(fptrevt,i+8+hdunum, 0, &status)) 
-			printerror( status );
+		
+		
+		//~ if(fits_movabs_hdu(fptrevt,i+8+hdunum, 0, &status)) 
+			//~ printerror( status );
+			
+		if(fits_movnam_hdu(fptrevt, BINARY_TBL, extname, 0, &status)) 
+			printerror( status );   
 		
 		//if ( fits_open_file(&fptrOut, outputfile, READWRITE, &status) ) 
 	        	//printerror( status );
 		if ( fits_create_tbl( fptrOut, BINARY_TBL, 0, tfields_gti, ttype_gti, tform_gti,tunit_gti, extname, &status) )
 			printerror( status );
-		if ( fits_movabs_hdu(fptrOut, i+10, &hdutype, &status) ) 
-	         	printerror( status );
+			
+		//~ if ( fits_movabs_hdu(fptrOut, i+10, &hdutype, &status) ) 
+	         	//~ printerror( status );
+	         	
+	    if(fits_movnam_hdu(fptrOut, BINARY_TBL, extname, 0, &status)) 
+			printerror( status );  
+	         	
+	         	
 		//if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
 			//printerror( status );
 
@@ -1726,7 +1744,8 @@ void createLivetimeFile(char *outputfile)
 
 }*/
 
-void writegtiextension(double *gtistart, double *gtistop, double gtinrows, int hdunum, double tstart, double tstop, double exposure)
+
+void writegtiextension(double *gtistart, double *gtistop, double gtinrows, char extention_name[20], double tstart, double tstop, double exposure)
 {
 	fitsfile *fptrOut; 
 	int status, hdutype;
@@ -1743,8 +1762,11 @@ void writegtiextension(double *gtistart, double *gtistop, double gtinrows, int h
 	//printf("%d\t%d\n",tstarti,tstopi);
 	if ( fits_open_file(&fptrOut, outfile, READWRITE, &status) ) 
 	        printerror( status );
-	if ( fits_movabs_hdu(fptrOut, hdunum, &hdutype, &status) ) 
-	      	printerror( status );
+	        
+	if (   fits_movnam_hdu(fptrOut, BINARY_TBL, extention_name, 0, &status) )
+			printerror( status );
+	//~ if ( fits_movabs_hdu(fptrOut, hdunum, &hdutype, &status) ) 
+	      	
 	 
 
 	status=0;
