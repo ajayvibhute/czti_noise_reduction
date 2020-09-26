@@ -848,9 +848,6 @@ void processHeavyBunchClean()
 		
 		//~ fits_movabs_hdu(evtfptr,14, NULL, &status);
 		fits_movnam_hdu(evtfptr, BINARY_TBL, "EXPOSURE", 0, &status);
-		
-		
-		
 		fits_read_col(evtfptr, TDOUBLE, qid+1, frow, felem, 4096, &doublenull, pixel_exposure[qid],&anynull, &status);
 		
 		

@@ -441,11 +441,11 @@ void createEventFile(char *outputfile,char *eventfile)
 		printerror( status );
 
 	// Copy GTI
-	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
-		printerror( status );         
+	//~ if(fits_movnam_hdu(fptrevt, BINARY_TBL, "GTI", 0, &status)) 
+		//~ printerror( status );         
 
-	if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
-		printerror( status );
+	//~ if(fits_copy_hdu(fptrevt, fptrOut, 0, &status))
+		//~ printerror( status );
 
 	// Copy Q0_GTI
 	if(fits_movnam_hdu(fptrevt, BINARY_TBL, "Q0_GTI", 0, &status)) 
