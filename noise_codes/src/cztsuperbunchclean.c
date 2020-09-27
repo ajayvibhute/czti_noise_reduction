@@ -205,8 +205,11 @@ void processSuperBunchClean()
 	if(status) { printerror( status );}
 
 	char *file = strtok(infile, "."); 
+	
+	//file = strtok(file, "/");
 	//sprintf(outfile, "%s_sbc.evt",file);
 	sprintf(outtxtfile, "%s_sbc.txt",file);
+	printf("The output log file is  %s\n",outtxtfile);
 	//sprintf(outlivetimefile, "%s_sbc_livetime.fits",file);
 	//sprintf(outbtifile, "%s_sbc_bti.fits",file);
 	f1=fopen(outtxtfile,"a");      
@@ -380,6 +383,7 @@ void processSuperBunchClean()
 				{ 
 					buntime_heavy[heavy_bunch_length++] = buntime_real[real_bunch_length];
 				}
+					
 				
 				real_bunch_length++;
 				i++;
@@ -388,6 +392,11 @@ void processSuperBunchClean()
 			}
 			else
 			{
+				//~ if( (buntime[i]> 209474728.004126+71283.7) && (buntime[i]< 209474728.004126+71283.7+2.0)) 
+				//~ {
+					//~ printf("%d %lf %lf \n",bunsize[i],(buntime[i] + 20.0*(double)buntime_dsl[i]/1000000.0), buntime[i+1] );
+					
+				//~ }
 				
 				for(j=i+1;j<bunnrows;j++)
 				{
@@ -419,6 +428,14 @@ void processSuperBunchClean()
 						
 					}
 				}
+				//~ if( (buntime[i]> 209474728.004126+71283.7) && (buntime[i]< 209474728.004126+71283.7+2.0)) 
+				//~ {
+					//~ printf("%d %lf \n",bunsize_real[real_bunch_length-1], buntime_heavy[real_bunch_length-1]);
+					
+				//~ }
+				
+				
+				
 			} 
 			if(i==(bunnrows-1))break;
 			//printf("%lf %d\n",buntime_real[real_bunch_length-1],bunsize_real[real_bunch_length-1]);
@@ -429,7 +446,7 @@ void processSuperBunchClean()
 		printf("Initial number of bunches = %ld\n",bunnrows);
 		printf("Bunch length correction Completed-----total bunches = %ld\n",real_bunch_length);
 		printf("Number of super bunches = %ld\n",heavy_bunch_length);
-		//printf("%lf\n",kk/(tstop-tstart));
+		
 	
 
 
@@ -456,7 +473,7 @@ void processSuperBunchClean()
 					}
 		
 				}
-	
+				
 	
 				counter2 = 0;
 				for(j=tmpindex;j<evtnrows;j++)
@@ -509,6 +526,7 @@ void processSuperBunchClean()
 		
 				}
 							//printf("%d\n",counter3);
+				
 
 				for(k=0;k<counter3;k++)
 				{
@@ -587,35 +605,59 @@ void processSuperBunchClean()
 					}
 				}
 				
+			
+				
 				if (n_hot_pix!=0.0){
 				allowable_hot = total_hotness/n_hot_pix;}
 				else allowable_hot =0.0;
 				//need to change(orbit no)
 				//fprintf(f1,"%d\t%f\t%f\t%f\t%f\t%s\n",bunch_size,allowable_hot,total_hotness,n_hot_pix,n_pair,orbitno);
+				
 				fprintf(f1,"%f\t%f\t%f\t%f\t%d\n",allowable_hot,total_hotness,n_hot_pix,n_pair,qid);
-		
-			
-		
+				
+				
+				//~ if( (buntime_heavy[i]> 209474728.004126+71283.7) && (buntime_heavy[i]< 209474728.004126+71283.7+2.0)) 
+				//~ {
+					//~ printf("%lf\t%f\t%f\t%f\t%f\t%d\n",buntime_heavy[i],allowable_hot,total_hotness,n_hot_pix,n_pair,qid);
+					
+				//~ }
+				
+				
 				if (allowable_hot>allowable_hot_thresh)
 				{	
 					//printf("ENTERED FLAGGED\n");
 					live_time_UT[live_counter++] = buntime_heavy[i];
 					BTITSTART[BTI_counter] = buntime_heavy[i];
-					BTITSTOP[BTI_counter]  = buntime_heavy[i]+0.1;
+					BTITSTOP[BTI_counter]  = buntime_heavy[i]+dph_time;
 					BTI_counter++;
+
 					//printf("%lf\t%lf\t%d\n",buntime_heavy[i],live_time_UT[live_counter-1],live_counter);
-					for(e=tmpindex1;e<evtnrows;e++)
+					for(e=tmpindex;e<evtnrows;e++)
 					{
 						if((int)evttime[e] > (int)buntime_heavy[i]+1){break;}
-						if((int)evttime[e]-1 < (int)buntime_heavy[i]){tmpindex1=e;}
 						
-						if((evttime[e] > buntime_heavy[i]) && (evttime[e] <= buntime_heavy[i]+dph_time))
-						{
-							
+						//if((int)evttime[e]-5 < (int)buntime_heavy[i]){tmpindex1=e;}
+						//tmpindex1=e;
+						
+						//if( (evttime[e]> 209474728.004126+71283.7) && (evttime[e]< 209474728.004126+71283.7+0.12))
+						//printf("%d\t%lf\n",e,evttime[e],buntime_heavy[i]);
+						
+						
+						if((evttime[e] >= buntime_heavy[i]) && (evttime[e] <= buntime_heavy[i]+dph_time))
+						{	
+
 							evt_flag[e] = 1;
 						}
 					}
 				}
+				
+				//~ if( (buntime_heavy[i]> 209474728.004126+71283.7) && (buntime_heavy[i]< 209474728.004126+71283.7+2.0)) 
+				//~ {
+					//~ printf("%lf\t%f\t%f\t%f\t%f\t%d\n",buntime_heavy[i],allowable_hot,total_hotness,n_hot_pix,n_pair,qid);
+					
+				//~ }
+				
+				
 
 			//}
 		}
