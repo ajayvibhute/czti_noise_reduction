@@ -579,6 +579,8 @@ void processSuperBunchClean()
 							//	printf("hotness values %lf %lf %d %d %d %d\n",d,cij,detx_temp[m],detx_temp[k],dety_temp[m],dety_temp[k]);			
 							//}
 							
+							
+							
 							if(cij > thresh_hot)
 							{
 								total_hotness = total_hotness+cij;
@@ -626,6 +628,8 @@ void processSuperBunchClean()
 				if (allowable_hot>allowable_hot_thresh)
 				{	
 					//printf("ENTERED FLAGGED\n");
+					
+					if(buntime_heavy[i]>209569630.0 && buntime_heavy[i]<209569633.0) printf("True dphstructure\n");
 					live_time_UT[live_counter++] = buntime_heavy[i];
 					BTITSTART[BTI_counter] = buntime_heavy[i];
 					BTITSTOP[BTI_counter]  = buntime_heavy[i]+dph_time;
@@ -717,7 +721,7 @@ void processSuperBunchClean()
 		GTITSTOP_merge=(double*)malloc(sizeof(double)*(BTItimesize+1));
 		
 		
-		
+		printf("tstop = %lf \n",tstop);
 		//To select GTI for the particular file
 		long gti_counter=0;
 		for(i=0;i<qgtinrows;i++)
@@ -758,6 +762,7 @@ void processSuperBunchClean()
 			}
 			
 		}
+		
 		
 		
 		double exposure=0.0;
@@ -811,6 +816,8 @@ void processSuperBunchClean()
 		
 		//fits_read_key(fevt,TDOUBLE,"TSTOP",&GTITSTOP_merge[ii],NULL, &status);
 		GTITSTOP_merge[ii]=tstop;
+		ii++;
+		
 		
 		if(BTI_counter==0){ii++;}
 	
@@ -912,8 +919,12 @@ void processSuperBunchClean()
 		
 		
 		//printf("GTI____%ld %d\n",gti_counter,ii);
-		
 		//printf("GTI duration = %d\n",gti_counter);
+		
+				
+		//printf("last gti_sel= %lf \n",gtitstop_sel[gti_counter-1]);
+		//printf("last gti after merge gti_merge = %lf \n",GTITSTOP_merge[ii]);
+		
 		for(i=0;i<gti_counter;i++)
 		{
 			if(gtitstart_sel[i] > gtitstop_sel[i])
@@ -934,10 +945,6 @@ void processSuperBunchClean()
 				{
 					printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
 				}
-				
-				
-				
-				
 				
 				
 				if(((GTITSTART_merge[j]>=gtitstart_sel[i])&&(GTITSTART_merge[j]<gtitstop_sel[i]))&&((GTITSTOP_merge[j]>=gtitstart_sel[i])&&(GTITSTOP_merge[j]<gtitstop_sel[i])))
@@ -975,7 +982,9 @@ void processSuperBunchClean()
 			}
 			
 		}
-		printf("GTI duration = %ld\n",gtinrows_f);
+		//printf("last gti after merge = %lf \n",gtitstop_f[gtinrows_f-1]);
+		
+		//printf("GTI duration = %ld\n",gtinrows_f);
 		
 		//To test overlap
 		
@@ -1008,6 +1017,11 @@ void processSuperBunchClean()
 			livfrac = 0.0;
 			for(j=0;j<gtinrows_f;j++)
 			{
+				
+				
+				
+				 
+				
 				if(((gtitstart_f[j] >= lttime_new[i]-livetime_resolution) && (gtitstart_f[j] < lttime_new[i]+livetime_resolution) )  && ((gtitstop_f[j]>= lttime_new[i]-livetime_resolution) && (gtitstop_f[j] < lttime_new[i]+livetime_resolution) ))
 				{
 					livfrac = livfrac+ gtitstop_f[j]-gtitstart_f[j];
@@ -1033,12 +1047,18 @@ void processSuperBunchClean()
 					
 					
 				}
+				//if(lttime_new[i]>209569630.0 && lttime_new[i]<209569633.0 && livfrac !=0.0)
+				//printf("%lf\t%lf\t%lf\t%d\t%d\n",lttime_new[i],gtitstart_f[j],gtitstop_f[j],j,gtinrows_f);
+				
 			}
 			
 			//printf("%lf\n",livfrac);
 			
 			//double test=livfrac/(2.0*livetime_resolution)-(1.0-fracexp_new[i])*(2.0*livetime_resolution);
 			//printf("%lf\t%lf\t%lf\t%lf\n",livfrac,fracexp_new[i],1-fracexp_new[i]/(2.0*livetime_resolution),test);
+			
+			//if(lttime_new[i]>209569630.0 && lttime_new[i]<209569633.0) printf("%lf\n",livfrac);
+			
 			
 			if (livfrac==0.0){fracexp_new[i]=livetime_resolution*2;}
 			//double test_value = fracexp_new[i];

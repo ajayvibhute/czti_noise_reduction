@@ -652,9 +652,11 @@ void processFlickPixReduction()
 				
 				if(bintime<=evttime[j] && bintime+1.0 > evttime[j])
 				{	
+					if (flick_all_1s==0){tempind1=j;}
+					
 					flick_detpixid_1s[detpixid[j]]++;
 					flick_all_1s++;
-					tempind1=j;
+					
 					
 				}
 				if(evttime[j]-bintime >= 3.0){break;}
@@ -662,15 +664,15 @@ void processFlickPixReduction()
 			//if(qid==1){printf("%d\t%d\n",flick_detpixid_1s[230], flick_all_1s++);}
 			flick_pix_counter_1s=0;
 			flick_thresh_1s = pixThresholdFix(flick_all_1s,valid_pix_counter);
-			//if(bintime>211223974.15 && bintime<211223990.15)
-			//printf("flick_thresh_1s : %d\n",flick_thresh_1s);
+			//if(bintime>209567253.0 && bintime<209567255.0)printf("flick_thresh_1s : %d\n",flick_thresh_1s);
 
 			for(jj=0;jj<4096;jj++)
 			{
 
 				//if(qid==1 && j==230){ printf("%d\t%d\n",flick_detpixid_1s[230], flick_thresh_1s);}
-				if(flick_detpixid_1s[jj]>flick_thresh_1s)
+				if(flick_detpixid_1s[jj]>=flick_thresh_1s)
 				{
+					
 					
 					pixel_badtime[qid][jj] = pixel_badtime[qid][jj]+1.0; 
 					//flick_pix_time_1s[flick_pix_counter_1s]=bintime;
@@ -679,6 +681,8 @@ void processFlickPixReduction()
 					flick_pix_counter_1s++;
 					
 				}
+				
+				
 
 
 			}
@@ -686,7 +690,7 @@ void processFlickPixReduction()
 			//~ if(flick_pix_counter_1s>0) printf("%d\t%d\t%d\n",flick_pix_counter_1s,flick_thresh_1s,qid);
 			for(k=0;k<flick_pix_counter_1s;k++)
 			{
-				for(j=tempind2;j<evtnrows;j++)
+				for(j=tempind1;j<evtnrows;j++)
 				{
 					//if(qid==1 && detpixid[j]==230 && flick_pix_1s[k]==230){ printf("True %d\t%lf\n",flick_pix_1s[k],flick_pix_time_1s[k]);}
 					
@@ -694,6 +698,7 @@ void processFlickPixReduction()
 					{
 						//if(qid==1 && detpixid[j]==230 && flick_pix_1s[k]==230){ printf("True %d\t%lf\t%lf\t%d\n",flick_pix_1s[k],bintime,evttime[j],j);}
 						//printf("1s row\n");
+						//if(bintime>209567253.0 && bintime<209567255.0) printf("True\n");
 						evt_flag[j]=1;
 						tempind2=j;
 						//break;
@@ -729,7 +734,7 @@ void processFlickPixReduction()
 
 		
 		
-		/*
+		
 		tempind1=0;tempind2=0,jj=0;
 		for(bintime=evttime[0];bintime<evttime[evtnrows-1];bintime+=10.0)
 		{
@@ -764,7 +769,7 @@ void processFlickPixReduction()
 
 			for(jj=0;jj<4096;jj++)
 			{
-				if(flick_detpixid_10s[jj]>flick_thresh_10s)
+				if(flick_detpixid_10s[jj]>=flick_thresh_10s)
 				{
 					
 					pixel_badtime[qid][jj] = pixel_badtime[qid][jj]+10.0;
@@ -779,7 +784,7 @@ void processFlickPixReduction()
 			//if(flick_pix_counter_10s>0) printf("%d\t%d\t10\t%d\n",flick_pix_counter_10s,flick_thresh_10s,qid);
 			for(k=0;k<flick_pix_counter_10s;k++)
 			{
-				for(j=tempind2;j<evtnrows;j++)
+				for(j=tempind1;j<evtnrows;j++)
 				{
 					
 					if((evttime[j]>=flick_pix_time_10s[k] && evttime[j]<flick_pix_time_10s[k]+10.0) && detpixid[j]== flick_pix_10s[k])
@@ -808,7 +813,7 @@ void processFlickPixReduction()
 			
 			writeBTI(btidetid,btipixid,btidetx,btidety,btitstart,btitstop,flick_pix_counter_10s,outbtifile,qid+2);
 				
-		} */
+		} 
 		
 		
 		
@@ -943,7 +948,7 @@ void writeBadpix(unsigned char *detid,unsigned char *pixid,unsigned char *pixx,u
 
 int pixThresholdFix(int countrate, int num_pix)
 {
-	double mean=(double)countrate/(4096.0-(double)num_pix),chance;//4096-bad+dead pix count
+	double mean=(double)countrate/((double)num_pix),chance;//4096-bad+dead pix count
 	//printf("Mean = %lf\n",mean);
 	int x=2,i;
 	int factx;
@@ -951,11 +956,11 @@ int pixThresholdFix(int countrate, int num_pix)
 	{
 		factx=1;
 		for(i=1;i<=x;i++){factx=factx*i;}
-		chance = pow(2.718,-mean)*pow(mean,(double)x)/(double)factx*(4096.0-(double)num_pix);//4096-bad+dead pix count 
+		chance = pow(2.718,-mean)*pow(mean,(double)x)/(double)factx*((double)num_pix);//4096-bad+dead pix count 
 		if(chance<1.0){break;}
 		x++;
 	}
-
+	//printf("%d\t%d\t%d\t%lf\n",countrate,num_pix,x,chance);
 	return x;
 
 }
