@@ -24,7 +24,8 @@
 void processHeavyBunchClean();
 void printerror( int status);
 void createEventFile(char *outputfile,char *infile);
-void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int bufsize,int hdunum,double exposure);
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure);
+//~ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int bufsize,int hdunum,double exposure);
 void modifyEventHeaderParams(char *outputfile);
 void modifyExposure(char *outputfile, double **pix_exposure,int qid);
 
@@ -74,17 +75,18 @@ void processHeavyBunchClean()
 	double *buntime_heavy,*buntime_real;
 	int *bunsize_real;
 	unsigned char *buntime_dfs,*buntime_dsl;
-	int ii,flag,status, hdunum, hdutype,  nfound, anynull,i,intnull,llddetidcolnum,lldpixidcolnum,lldcolnum,qid;
+	int ii,flag,status, hdunum, hdutype,  nfound, anynull,intnull,llddetidcolnum,lldpixidcolnum,lldcolnum,qid;
 	long frow, felem, nelem,nrows,evtnrows=0,bunchnrows=0, longnull=0,size=1;
 	double *bunchtime;
-	int j,*event_flag,*bunch_flag;
+	int *event_flag,*bunch_flag;
+	long i,j;
 	unsigned char *numevent,*bunch_detid1,*bunch_detid2,*bunch_detid3,*bunch_detid4, *bunch_detid5, *bunch_detid6, *bunch_detid7, *bunch_detid;
 	unsigned char *caldb_detid,*caldb_pixid,*pix_flag,*final_pix_flag,bytenull,*caldb_detx,*caldb_dety;
 	double *evttime,*cztseccnt,*finalevttime,*finalcztseccnt,doublenull;
-        short *cztntick,*veto,*finalcztntick,*finalveto,*pha,*finalpha;
+    unsigned short *cztntick,*veto,*finalcztntick,*finalveto,*pha,*finalpha;
 	unsigned char *detid,*pixid,*detx,*dety,*alpha,*finaldetid,*finalpixid,*finaldetx,*finaldety,*finalalpha;
 	float *energy,floatnull,*finalenergy;
-        int *pi,*finalpi;
+    unsigned short *pi,*finalpi;
         int lld_2d[64][64],ignore_count[2],*caldb_lld;
 	int quadstart=0,quadend=4;
 	int **dph;
@@ -123,29 +125,29 @@ void processHeavyBunchClean()
 		
 		evttime  = (double*)malloc(size * sizeof(double));
 		cztseccnt  = (double*)malloc(size * sizeof(double));
-		pha  = (short *)malloc(size * sizeof(short));
-		cztntick  = (short *)malloc(size * sizeof(short));
-		veto  = (short *)malloc(size * sizeof(short));
+		pha  = (unsigned short *)malloc(size * sizeof(unsigned short));
+		cztntick  = (unsigned short *)malloc(size * sizeof(unsigned short));
+		veto  = (unsigned short *)malloc(size * sizeof(unsigned short));
 		detid  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		pixid  =(unsigned char*) malloc(size * sizeof(unsigned char));
 		detx  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		dety  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		alpha = (unsigned char*)malloc(size * sizeof(unsigned char));
 		energy = (float*)malloc(sizeof(float)*size);
-		pi = (int*)malloc(sizeof(int)*size);
+		pi = (unsigned short*)malloc(sizeof(unsigned short)*size);
 
 		finalevttime  = (double*)malloc(size * sizeof(double));
 		finalcztseccnt  = (double*)malloc(size * sizeof(double));
-		finalpha  = (short *)malloc(size * sizeof(short));
-		finalcztntick  = (short *)malloc(size * sizeof(short));
-		finalveto  = (short *)malloc(size * sizeof(short));
+		finalpha  = (unsigned short *)malloc(size * sizeof(unsigned short));
+		finalcztntick  = (unsigned short *)malloc(size * sizeof(unsigned short));
+		finalveto  = (unsigned short *)malloc(size * sizeof(unsigned short));
 		finaldetid  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finalpixid  =(unsigned char*) malloc(size * sizeof(unsigned char));
 		finaldetx  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finaldety  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finalalpha = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finalenergy = (float*)malloc(sizeof(float)*size);
-		finalpi = (int*)malloc(sizeof(int)*size);
+		finalpi = (unsigned short*)malloc(sizeof(unsigned short)*size);
 
 	thrfile = fopen(thresholdfile, "r");
 
@@ -317,30 +319,30 @@ void processHeavyBunchClean()
 
 		evttime  = (double*)realloc(evttime,evtnrows * sizeof(double));
 		cztseccnt  = (double*)realloc(cztseccnt,evtnrows * sizeof(double));
-		pha  = (short *)realloc(pha,evtnrows * sizeof(short));
-		cztntick  = (short *)realloc(cztntick,evtnrows * sizeof(short));
-		veto  = (short *)realloc(veto,evtnrows * sizeof(short));
+		pha  = (unsigned short *)realloc(pha,evtnrows * sizeof(unsigned short));
+		cztntick  = (unsigned short *)realloc(cztntick,evtnrows * sizeof(unsigned short));
+		veto  = (unsigned short *)realloc(veto,evtnrows * sizeof(unsigned short));
 		detid  = (unsigned char*)realloc(detid,evtnrows * sizeof(unsigned char));
 		pixid  =(unsigned char*) realloc(pixid,evtnrows * sizeof(unsigned char));
 		detx  = (unsigned char*)realloc(detx,evtnrows * sizeof(unsigned char));
 		dety  = (unsigned char*)realloc(dety,evtnrows * sizeof(unsigned char));
 		alpha = (unsigned char*)realloc(alpha,evtnrows * sizeof(unsigned char));
 		energy = (float*)realloc(energy,sizeof(float)*evtnrows);
-		pi = (int*)realloc(pi,sizeof(int)*evtnrows);
+		pi = (unsigned short*)realloc(pi,sizeof(unsigned short)*evtnrows);
 		
 
 		finalevttime  = (double*)realloc(finalevttime,evtnrows * sizeof(double));
 		finalcztseccnt  = (double*)realloc(finalcztseccnt,evtnrows * sizeof(double));
-		finalpha  = (short *)realloc(finalpha,evtnrows * sizeof(short));
-		finalcztntick  = (short *)realloc(finalcztntick,evtnrows * sizeof(short));
-		finalveto  = (short *)realloc(finalveto,evtnrows * sizeof(short));
+		finalpha  = (unsigned short *)realloc(finalpha,evtnrows * sizeof(unsigned short));
+		finalcztntick  = (unsigned short *)realloc(finalcztntick,evtnrows * sizeof(unsigned short));
+		finalveto  = (unsigned short *)realloc(finalveto,evtnrows * sizeof(unsigned short));
 		finaldetid  = (unsigned char*)realloc(finaldetid,evtnrows * sizeof(unsigned char));
 		finalpixid  =(unsigned char*) realloc(finalpixid,evtnrows * sizeof(unsigned char));
 		finaldetx  = (unsigned char*)realloc(finaldetx,evtnrows * sizeof(unsigned char));
 		finaldety  = (unsigned char*)realloc(finaldety,evtnrows * sizeof(unsigned char));
 		finalalpha = (unsigned char*)realloc(finalalpha,evtnrows * sizeof(unsigned char));
 		finalenergy = (float*)realloc(finalenergy,sizeof(float)*evtnrows);
-		finalpi = (int*)realloc(finalpi,sizeof(int)*evtnrows);
+		finalpi = (unsigned short*)realloc(finalpi,sizeof(unsigned short)*evtnrows);
 
 		
 								
@@ -353,15 +355,15 @@ void processHeavyBunchClean()
 
 		fits_read_col(evtfptr, TDOUBLE, 1, frow, felem, evtnrows, &doublenull, evttime,&anynull, &status);
 		fits_read_col(evtfptr, TDOUBLE, 2, frow, felem, evtnrows, &doublenull, cztseccnt, &anynull, &status);         
-		fits_read_col(evtfptr, TSHORT, 3, frow, felem, evtnrows, &intnull, cztntick, &anynull, &status); 
-		fits_read_col(evtfptr, TSHORT, 4, frow, felem, evtnrows, &intnull, pha,&anynull, &status);
+		fits_read_col(evtfptr, TUSHORT, 3, frow, felem, evtnrows, &intnull, cztntick, &anynull, &status); 
+		fits_read_col(evtfptr, TUSHORT, 4, frow, felem, evtnrows, &intnull, pha,&anynull, &status);
 		fits_read_col(evtfptr, TBYTE, 5, frow, felem,evtnrows, &bytenull, detid, &anynull, &status);  
 		fits_read_col(evtfptr, TBYTE, 6, frow, felem,evtnrows, &bytenull, pixid, &anynull, &status);        
 		fits_read_col(evtfptr, TBYTE, 7, frow, felem, evtnrows, &bytenull, detx, &anynull, &status);   
 		fits_read_col(evtfptr, TBYTE, 8, frow, felem,evtnrows, &bytenull, dety,&anynull, &status);
-		fits_read_col(evtfptr, TSHORT, 9, frow, felem,evtnrows, &intnull, veto,&anynull, &status);
+		fits_read_col(evtfptr, TUSHORT, 9, frow, felem,evtnrows, &intnull, veto,&anynull, &status);
 		fits_read_col(evtfptr, TBYTE, 10, frow, felem, evtnrows, &bytenull, alpha,&anynull, &status); 
-		fits_read_col(evtfptr, TINT, 11, frow, felem, evtnrows, &floatnull, pi,&anynull, &status);
+		fits_read_col(evtfptr, TUSHORT, 11, frow, felem, evtnrows, &intnull, pi,&anynull, &status);
 		fits_read_col(evtfptr, TFLOAT, 12, frow, felem, evtnrows, &floatnull, energy,&anynull, &status);
 		
 		double tstart=0.,tstop=0.,tot_exposure=0.0;
@@ -685,7 +687,7 @@ void processHeavyBunchClean()
 				
 				for(j=prev;j<evtnrows;j++)
 				{
-					if(!(( detx_min <= detx[j] && detx_max >= detx[j]) && ( dety_min <= dety[j] && dety_max >= dety[j])) && (bundet_heavy[i]==detid[j])){printf("%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t\n",bundet_heavy[i],detx[j],dety[j],detid[j],pixid[j],detx_min,detx_max,dety_min,dety_max);}	
+					//if(!(( detx_min <= detx[j] && detx_max >= detx[j]) && ( dety_min <= dety[j] && dety_max >= dety[j])) && (bundet_heavy[i]==detid[j])){printf("%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t\n",bundet_heavy[i],detx[j],dety[j],detid[j],pixid[j],detx_min,detx_max,dety_min,dety_max);}	
 					//if((evttime[j]>=buntime_heavy[i] && evttime[j]<=buntime_heavy[i]+heavy_bunch_time_threshold_LLD) && (bundet_heavy[i]==detid[j]) && (energy[j]<LLD_thresh[detx[j]][dety[j]]))
 					if((evttime[j]>=buntime_heavy[i] && evttime[j]<=buntime_heavy[i]+heavy_bunch_time_threshold_LLD) && (( detx_min <= detx[j] && detx_max >= detx[j]) && ( dety_min <= dety[j] && dety_max >= dety[j])) && (energy[j]<LLD_thresh[detx[j]][dety[j]]))
 					{
@@ -973,7 +975,7 @@ void createEventFile(char *outputfile,char *eventfile)
 	          
 	
 	char *ttype[] = { "TIME", "CZTSECCNT","CZTNTICK","PHA","DetID","pixID","DETX","DETY","veto","alpha","PI","ENERGY"};
-	char *tform[] = { "D","D","I","I","B","B","B","B","I","B","I","E"};
+	char *tform[] = { "D","D","U","U","B","B","B","B","U","B","U","E"};
 	char *tunit[] = {"s","s","micro-sec","counts","","","","","counts","counts","",""};
        
 	status=0;
@@ -1162,7 +1164,8 @@ void createEventFile(char *outputfile,char *eventfile)
 	return;
 }
 
-void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure)
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure)
+//void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure)
 {
 	fitsfile *fptrOut;       
 	int status, hdutype,intnull;
@@ -1208,15 +1211,15 @@ void writeEvent(double *evttime,double *cztseccnt,short *cztntick,short *pha,uns
 
         fits_write_col(fptrOut, TDOUBLE, 1, frow, felem, writesize, evttime,&status);
 	fits_write_col(fptrOut, TDOUBLE, 2, frow, felem, writesize, cztseccnt,&status);
-        fits_write_col(fptrOut, TSHORT, 3,frow, felem, writesize, cztntick,&status);  
-        fits_write_col(fptrOut, TSHORT, 4,frow, felem, writesize, pha,&status);
+        fits_write_col(fptrOut, TUSHORT, 3,frow, felem, writesize, cztntick,&status);  
+        fits_write_col(fptrOut, TUSHORT, 4,frow, felem, writesize, pha,&status);
 	fits_write_col(fptrOut, TBYTE, 5, frow, felem, writesize,detid,&status);
         fits_write_col(fptrOut, TBYTE, 6,frow, felem, writesize, pixid,&status);
 	fits_write_col(fptrOut, TBYTE, 7,frow, felem, writesize, detx,&status);
         fits_write_col(fptrOut, TBYTE, 8,frow, felem, writesize, dety,&status);
-	fits_write_col(fptrOut, TSHORT, 9, frow, felem, writesize, veto,&status);   
+	fits_write_col(fptrOut, TUSHORT, 9, frow, felem, writesize, veto,&status);   
         fits_write_col(fptrOut, TBYTE, 10,frow, felem, writesize,alpha,&status);
-	fits_write_col(fptrOut, TINT, 11,frow, felem, writesize, pi, &status);
+	fits_write_col(fptrOut, TUSHORT, 11,frow, felem, writesize, pi, &status);
 	fits_write_col(fptrOut, TFLOAT, 12,frow, felem, writesize,energy, &status);	
 
 	if ( fits_close_file(fptrOut, &status) )       

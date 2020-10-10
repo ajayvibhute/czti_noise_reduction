@@ -33,7 +33,7 @@ void printerror( int status);
 void createEventFile(char *outputfile,char *infile);
 void createBadpixFile(char *outputfile);
 void createBTIFile(char *outputfile);
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure);
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure);
 //void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int bufsize,int hdunum);
 void writeBadpix(unsigned char *detid,unsigned char *pixid,unsigned char *pixx,unsigned char *pixy,unsigned char *pix_flag,char *outputfile,int hdunum);
 void writeBTI(unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,double *tstart,double *tstop,int writesize,char *outputfile,int hdunum);
@@ -86,10 +86,11 @@ void processFlickPixReduction()
 {
 	fitsfile *caldbfptr,*evtfptr,*badpixfptr; 
 	FILE *logfile;      
-	int ii,flag,status, hdunum, hdutype,   anynull,i,intnull,badpixdetidcolnum,badpixpixidcolnum,pixflagcolnum,size=1;
+	long i,j;
+	int ii,flag,status, hdunum, hdutype,   anynull,intnull,badpixdetidcolnum,badpixpixidcolnum,pixflagcolnum,size=1;
 	long frow, felem, nelem,nrows,evtnrows, longnull,badpixnrows;
 	double *evttime,*cztseccnt,*finalevttime,*finalcztseccnt,doublenull,*btitstart,*btitstop;
-	int j,*pi,*finalpi;
+	unsigned short *pi,*finalpi;
 	unsigned short *cztntick,*veto,*finalcztntick,*finalveto,*pha,*finalpha;
 	unsigned char *detid,*pixid,*detx,*dety,*alpha,*finaldetid,*finalpixid,*finaldetx,*finaldety,*finalalpha,*bpdetx,*bpdety,*bpdetid,*bppixid,*bppix_flag,*btidetx,*btidety,*btidetid,*btipixid;
 	float *energy,floatnull,*finalenergy;
@@ -110,7 +111,7 @@ void processFlickPixReduction()
 		dety  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		alpha = (unsigned char*)malloc(size * sizeof(unsigned char));
 		energy = (float*)malloc(sizeof(float)*size);
-		pi = (int*)malloc(sizeof(int)*size);
+		pi = (unsigned short*)malloc(sizeof(unsigned short)*size);
 
 		finalevttime  = (double*)malloc(size * sizeof(double));
 		finalcztseccnt  = (double*)malloc(size * sizeof(double));
@@ -123,7 +124,7 @@ void processFlickPixReduction()
 		finaldety  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finalalpha = (unsigned char*)malloc(size * sizeof(unsigned char));
 		finalenergy = (float*)malloc(sizeof(float)*size);
-		finalpi = (int*)malloc(sizeof(int)*size);
+		finalpi = (unsigned short*)malloc(sizeof(unsigned short)*size);
 
 		bpdetid  = (unsigned char*)malloc(size * sizeof(unsigned char));
 		bppixid  =(unsigned char*) malloc(size * sizeof(unsigned char));
@@ -268,7 +269,7 @@ void processFlickPixReduction()
 		dety  = (unsigned char*)realloc(dety,evtnrows * sizeof(unsigned char));
 		alpha = (unsigned char*)realloc(alpha,evtnrows * sizeof(unsigned char));
 		energy = (float*)realloc(energy,sizeof(float)*evtnrows);
-		pi = (int*)realloc(pi,sizeof(int)*evtnrows);
+		pi = (unsigned short*)realloc(pi,sizeof(unsigned short)*evtnrows);
 		detpixid  = (int*)realloc(detpixid,evtnrows * sizeof(int));
 
 
@@ -283,7 +284,7 @@ void processFlickPixReduction()
 		finaldety  = (unsigned char*)realloc(finaldety,evtnrows * sizeof(unsigned char));
 		finalalpha = (unsigned char*)realloc(finalalpha,evtnrows * sizeof(unsigned char));
 		finalenergy = (float*)realloc(finalenergy,sizeof(float)*evtnrows);
-		finalpi = (int*)realloc(finalpi,sizeof(int)*evtnrows);
+		finalpi = (unsigned short*)realloc(finalpi,sizeof(unsigned short)*evtnrows);
 
 
 		fits_read_col(evtfptr, TDOUBLE, 1, frow, felem, evtnrows, &doublenull, evttime,&anynull, &status);
@@ -296,7 +297,7 @@ void processFlickPixReduction()
 		fits_read_col(evtfptr, TBYTE, 8, frow, felem,evtnrows, &bytenull, dety,&anynull, &status);
 		fits_read_col(evtfptr, TUSHORT, 9, frow, felem,evtnrows, &intnull, veto,&anynull, &status);
 		fits_read_col(evtfptr, TBYTE, 10, frow, felem, evtnrows, &bytenull, alpha,&anynull, &status); 
-		fits_read_col(evtfptr, TINT, 11, frow, felem, evtnrows, &intnull, pi,&anynull, &status);
+		fits_read_col(evtfptr, TUSHORT, 11, frow, felem, evtnrows, &intnull, pi,&anynull, &status);
 		fits_read_col(evtfptr, TFLOAT, 12, frow, felem, evtnrows, &floatnull, energy,&anynull, &status);
 
 
@@ -981,7 +982,7 @@ void createEventFile(char *outputfile,char *eventfile)
 	          
 	
 	char *ttype[] = { "TIME", "CZTSECCNT","CZTNTICK","PHA","DetID","pixID","DETX","DETY","veto","alpha","PI","ENERGY"};
-	char *tform[] = { "D","D","I","I","B","B","B","B","I","B","I","E"};
+	char *tform[] = { "D","D","U","U","B","B","B","B","U","B","U","E"};
 	char *tunit[] = {"s","s","micro-sec","counts","","","","","counts","counts","",""};
        
 	status=0;
@@ -1264,7 +1265,7 @@ void createBTIFile(char *outputfile)
 	return;
 }
 
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure)
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum, double exposure)
 {
 	fitsfile *fptrOut;       
 	int status, hdutype;
@@ -1310,7 +1311,7 @@ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsig
     fits_write_col(fptrOut, TBYTE, 8,frow, felem, writesize, dety,&status);
 	fits_write_col(fptrOut, TUSHORT, 9, frow, felem, writesize, veto,&status);   
     fits_write_col(fptrOut, TBYTE, 10,frow, felem, writesize,alpha,&status);
-	fits_write_col(fptrOut, TINT, 11,frow, felem, writesize, pi, &status);
+	fits_write_col(fptrOut, TUSHORT, 11,frow, felem, writesize, pi, &status);
 	fits_write_col(fptrOut, TFLOAT, 12,frow, felem, writesize,energy, &status);
 
 	

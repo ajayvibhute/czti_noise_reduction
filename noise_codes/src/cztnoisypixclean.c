@@ -24,7 +24,8 @@ void printerror( int status);
 void createEventFile(char *outputfile,char *infile);
 void createBadpixFile(char *outputfile);
 void createLivetimeFile(char *outputfile);
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,long bufsize,int hdunum, double exposure);
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,long writesize,int hdunum,double exposure);
+//~ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char *detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,long bufsize,int hdunum, double exposure);
 void writeBadpix(unsigned char *detid,unsigned char *pixid,unsigned char *pixx,unsigned char *pixy,unsigned char *pix_flag,char *outputfile,int hdunum);
 void writeLivetime(double *time,float *livetime,int livetimesize,char *outputfile,int hdunum);
 void livetimeGeneration(double *evttime,double*,long evtnrows,double *bunchtime,long bunchnrows,char *outputfile,int hdunum);
@@ -83,12 +84,12 @@ void processNoiseReduction()
 	long frow, felem, nelem,nrows,evtnrows,bunchnrows, longnull;
 	double *evttime,*cztseccnt,*finalevttime,*finalcztseccnt,doublenull,*bunchtime;
 	int j;
-    	unsigned short *cztntick,*veto,*finalcztntick,*finalveto,*pha,*finalpha;
+    unsigned short *cztntick,*veto,*finalcztntick,*finalveto,*pha,*finalpha;
 	unsigned char *detid,*pixid,*detx,*dety,*alpha,*finaldetid,*finalpixid,*finaldetx,*finaldety,*finalalpha;
 	float *energy,floatnull,*finalenergy;
-    	int *pi,*finalpi;
+    unsigned short *pi,*finalpi;
 	unsigned char *caldb_detid,*caldb_pixid,*pix_flag,*final_pix_flag,bytenull,*caldb_detx,*caldb_dety;
-    	int pix_flag_2d[64][64],ignore_count[2];
+    int pix_flag_2d[64][64],ignore_count[2];
 	//int energycolnum,picolnum,timecolnum,cztseccntcolnum,cztntickcolnum,phacolnum,detidcolnum,pixidcolnum,detxcolnum,detycolnum,vetocolnum,alphacolnum;
 	int quadstart=0,quadend=4;
 	//float **dph;
@@ -121,7 +122,7 @@ void processNoiseReduction()
 	createBadpixFile(outbadpixfile);
 	//createLivetimeFile(outlivetimefile);
 
-	sprintf(outlogfile, "%s_nc.log",infile);
+	sprintf(outlogfile, "%s.log",outfile);
 	logfile=fopen(outlogfile,"a"); 
 
 
@@ -317,7 +318,7 @@ void processNoiseReduction()
 		dety  = (unsigned char*)realloc(dety,evtnrows * sizeof(unsigned char));
 		alpha = (unsigned char*)realloc(alpha,evtnrows * sizeof(unsigned char));
 		energy = (float*)realloc(energy,sizeof(float)*evtnrows);
-		pi = (int*)realloc(pi,sizeof(int)*evtnrows);
+		pi = (unsigned short*)realloc(pi,sizeof(unsigned short)*evtnrows);
 
 		//printf("%ld\n",evtnrows);
 		
@@ -333,7 +334,7 @@ void processNoiseReduction()
 		finaldety  = (unsigned char*)realloc(finaldety,evtnrows * sizeof(unsigned char));
 		finalalpha = (unsigned char*)realloc(finalalpha,evtnrows * sizeof(unsigned char));
 		finalenergy = (float*)realloc(finalenergy,sizeof(float)*evtnrows);
-		finalpi = (int*)realloc(finalpi,sizeof(int)*evtnrows);
+		finalpi = (unsigned short*)realloc(finalpi,sizeof(unsigned short)*evtnrows);
 		
 		
 		//fits_movabs_hdu(bunchfptr, i+2, NULL, &status);
@@ -368,7 +369,7 @@ void processNoiseReduction()
 		fits_read_col(evtfptr, TBYTE, 8, frow, felem,evtnrows, &bytenull, dety,&anynull, &status);
 		fits_read_col(evtfptr, TUSHORT, 9, frow, felem,evtnrows, &intnull, veto,&anynull, &status);
 		fits_read_col(evtfptr, TBYTE, 10, frow, felem, evtnrows, &bytenull, alpha,&anynull, &status); 
-		fits_read_col(evtfptr, TINT, 11, frow, felem, evtnrows, &floatnull, pi,&anynull, &status);
+		fits_read_col(evtfptr, TUSHORT, 11, frow, felem, evtnrows, &intnull, pi,&anynull, &status);
 		fits_read_col(evtfptr, TFLOAT, 12, frow, felem, evtnrows, &floatnull, energy,&anynull, &status);
 	    
 	   
@@ -455,7 +456,7 @@ void processNoiseReduction()
 			ignore_count[0]=0;
 			ignore_count[1]=0;
 			for(ii=0; ii<dimen; ++ii)
-	    		{
+			{
 				for(j=0; j<dimen; ++j)
 	    			{
 						
@@ -575,7 +576,7 @@ void processNoiseReduction()
 			
 		double *gtitstart,*gtitstop,*new_gtitstart,*new_gtitstop;
 		double tstart,tstop;
-		long gtinrows,ngtinrows=0;
+		long   gtinrows,ngtinrows=0;
 	
 		fits_read_key(evtfptr,TDOUBLE,"TSTART",&tstart,NULL, &status);
 		fits_read_key(evtfptr,TDOUBLE,"TSTOP",&tstop,NULL, &status);
@@ -586,8 +587,8 @@ void processNoiseReduction()
 		fits_movabs_hdu(evtfptr, i+10, &hdutype, &status);
 		fits_get_num_rows(evtfptr, &gtinrows, &status);
 		
-		gtitstart=(double*)malloc(sizeof(double)*gtinrows);
-		gtitstop= (double*)malloc(sizeof(double)*gtinrows);
+		gtitstart = (double*)malloc(sizeof(double)*gtinrows);
+		gtitstop  = (double*)malloc(sizeof(double)*gtinrows);
 		
 		new_gtitstart	= (double*)malloc(sizeof(double)*gtinrows);
 		new_gtitstop	= (double*)malloc(sizeof(double)*gtinrows);
@@ -608,6 +609,7 @@ void processNoiseReduction()
 		int j;
 		for(j=0;j<gtinrows;j++)
 		{
+
 			
 			if(((gtitstart[j]>=tstart)&&(gtitstart[j]<tstop))&&((gtitstop[j]>tstart)&&(gtitstop[j]<=tstop)))
 			{
@@ -1077,7 +1079,7 @@ void createLivetimeFile(char *outputfile)
 
 }
 
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,long writesize,int hdunum,double exposure)
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,long writesize,int hdunum,double exposure)
 {
 	fitsfile *fptrOut;       
 	int status, hdutype;
@@ -1124,7 +1126,7 @@ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsig
         fits_write_col(fptrOut, TBYTE, 8,frow, felem, writesize, dety,&status);
 	fits_write_col(fptrOut, TUSHORT, 9, frow, felem, writesize, veto,&status); //numerical data overflow exception  
         fits_write_col(fptrOut, TBYTE, 10,frow, felem, writesize,alpha,&status);
-	fits_write_col(fptrOut, TINT, 11,frow, felem, writesize, pi, &status);
+	fits_write_col(fptrOut, TUSHORT, 11,frow, felem, writesize, pi, &status);
 	fits_write_col(fptrOut, TFLOAT, 12,frow, felem, writesize,energy, &status);	
 		
 	

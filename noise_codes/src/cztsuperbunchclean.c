@@ -81,7 +81,8 @@ int main(int argc,char *argv[])
 void processSuperBunchClean()
 {
 	int tmpindex=0,tmpindex1=0;
-	unsigned int i,j,k,m,e,n,p;//,sum;
+	unsigned int k,m,e,n,p;//,sum;
+	long i,j;//,sum;
 	unsigned int qid;
 	//int evttime_col,evtdetx_col,evtdety_col,evtPI_col,evtdetid_col,evtpixid_col,evttime_index;
 	int buntime_col,bunsize_col,size=1,buntime_df1_col,buntime_df2_col;
@@ -208,7 +209,7 @@ void processSuperBunchClean()
 	
 	//file = strtok(file, "/");
 	//sprintf(outfile, "%s_sbc.evt",file);
-	sprintf(outtxtfile, "%s_sbc.txt",file);
+	sprintf(outtxtfile, "%s_sbc.log",file);
 	printf("The output log file is  %s\n",outtxtfile);
 	//sprintf(outlivetimefile, "%s_sbc_livetime.fits",file);
 	//sprintf(outbtifile, "%s_sbc_bti.fits",file);
@@ -721,7 +722,7 @@ void processSuperBunchClean()
 		GTITSTOP_merge=(double*)malloc(sizeof(double)*(BTItimesize+1));
 		
 		
-		printf("tstop = %lf \n",tstop);
+		//printf("tstop = %lf \n",tstop);
 		//To select GTI for the particular file
 		long gti_counter=0;
 		for(i=0;i<qgtinrows;i++)
@@ -1264,7 +1265,7 @@ void processSuperBunchClean()
 		//exposure = exposure - exp_loss_due_bunches;
 		
 		printf("Exposure loss due to bunches = %lf\n",exp_loss_due_bunches);
-		printf("Final Exposure = %lf\n",exposure);
+		//printf("Final Exposure = %lf\n",exposure);
 		writeLivetime(lttime_new,fracexp_new,livetimenrows_new,qid+2);
 		//livetimeGeneration(live_time_UT,live_counter,outlivetimefile,qid+2,lttime_new,fracexp_new,livetimenrows_new);
 		
@@ -1499,8 +1500,8 @@ void createEventFile(char *eventfile)
 	          
 	
 	char *ttype[] = { "TIME", "CZTSECCNT","CZTNTICK","PHA","DetID","pixID","DETX","DETY","veto","alpha","PI","ENERGY"};
-	char *tform[] = { "D","D","I","I","B","B","B","B","I","B","I","E"};
-	char *tunit[] = {"s","s","micro-sec","counts","","","","","counts","counts","",""};
+	char *tform[] = { "D","D","U","U","B","B","B","B","U","B","U","E"};
+	char *tunit[] = { "s","s","micro-sec","counts","","","","","counts","counts","",""};
        
 	status=0;
         if (fits_create_file(&fptrOut, outfile, &status))

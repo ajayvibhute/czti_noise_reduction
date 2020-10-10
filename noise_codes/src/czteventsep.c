@@ -17,7 +17,7 @@ void processeventseperation();
 void printerror( int status);
 void modifyEventHeaderParams(char *outputfile);
 //void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum);
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure);
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure);
 
 int read_input_parameters(int r, char *infile,char *outfile_single,char *outfile_double,int *clobber,int *history);
 int display_input_parameters(char *infile, char *outfile_single,char *outfile_double,int clobber,int history);
@@ -69,8 +69,10 @@ void processeventseperation()
 	int status=0,hdutype=0;
 	int double_flag;
 	long evtnrows;
-	int qid,i,j,k,l1,l2;
-	int intnull,anynull,*evtpi,*finalpi_single,*finalpi_double,*redund_flag;
+	int qid,k,l1,l2;
+	long i,j;
+	unsigned short  *evtpi,*finalpi_single,*finalpi_double;
+	int intnull,anynull,*redund_flag;
 	unsigned char *evtdetid,*evtpixid,*evtdetx,*evtdety,*evtalpha,*finaldetid_double,*finalpixid_double,*finaldetx_double,*finaldety_double,*finalalpha_double,bytenull;
 	unsigned char *finaldetid_single,*finalpixid_single,*finaldetx_single,*finaldety_single,*finalalpha_single;
 	unsigned short *evtpha,*finalpha_single,*evtcztntick,*evtveto,*finalcztntick_single,*finalveto_single,*finalcztntick_double,*finalveto_double,*finalpha_double;
@@ -96,7 +98,7 @@ void processeventseperation()
 	evtdety  = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	evtalpha = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	evtenergy = (float*)malloc(sizeof(float)*evtnrows);
-	evtpi = (int*)malloc(sizeof(int)*evtnrows);
+	evtpi = (unsigned short*)malloc(sizeof(unsigned short)*evtnrows);
 	
 	finalevttime_single  = (double*)malloc(evtnrows * sizeof(double));
 	finalcztseccnt_single  = (double*)malloc(evtnrows * sizeof(double));
@@ -109,7 +111,7 @@ void processeventseperation()
 	finaldety_single  = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	finalalpha_single = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	finalenergy_single = (float*)malloc(sizeof(float)*evtnrows);
-	finalpi_single = (int*)malloc(sizeof(int)*evtnrows);
+	finalpi_single = (unsigned short*)malloc(sizeof(unsigned short)*evtnrows);
 	
 	finalevttime_double  = (double*)malloc(evtnrows * sizeof(double));
 	finalcztseccnt_double  = (double*)malloc(evtnrows * sizeof(double));
@@ -122,7 +124,7 @@ void processeventseperation()
 	finaldety_double = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	finalalpha_double = (unsigned char*)malloc(evtnrows * sizeof(unsigned char));
 	finalenergy_double = (float*)malloc(sizeof(float)*evtnrows);
-	finalpi_double = (int*)malloc(sizeof(int)*evtnrows);
+	finalpi_double = (unsigned short*)malloc(sizeof(unsigned short)*evtnrows);
 
 	if(clobber==1){
 	remove(outfile_single);
@@ -149,7 +151,7 @@ void processeventseperation()
 		evtveto  = (unsigned short*)realloc(evtveto,evtnrows * sizeof(unsigned short));
 		evtalpha = (unsigned char*)realloc(evtalpha,evtnrows * sizeof(unsigned char));
 		evtenergy = (float*)realloc(evtenergy,sizeof(float)*evtnrows);
-		evtpi = (int*)realloc(evtpi,sizeof(int)*evtnrows);
+		evtpi = (unsigned short*)realloc(evtpi,sizeof(unsigned short)*evtnrows);
 		
 		finalevttime_single  = (double*)realloc(finalevttime_single,evtnrows * sizeof(double));
 		finalcztseccnt_single  = (double*)realloc(finalcztseccnt_single,evtnrows * sizeof(double));
@@ -162,7 +164,7 @@ void processeventseperation()
 		finaldety_single  = (unsigned char*)realloc(finaldety_single,evtnrows * sizeof(unsigned char));
 		finalalpha_single = (unsigned char*)realloc(finalalpha_single,evtnrows * sizeof(unsigned char));
 		finalenergy_single = (float*)realloc(finalenergy_single,sizeof(float)*evtnrows);
-		finalpi_single = (int*)realloc(finalpi_single,sizeof(int)*evtnrows);
+		finalpi_single = (unsigned short*)realloc(finalpi_single,sizeof(unsigned short)*evtnrows);
 
 		finalevttime_double  = (double*)realloc(finalevttime_double,evtnrows * sizeof(double));
 		finalcztseccnt_double  = (double*)realloc(finalcztseccnt_double,evtnrows * sizeof(double));
@@ -175,7 +177,7 @@ void processeventseperation()
 		finaldety_double  = (unsigned char*)realloc(finaldety_double,evtnrows * sizeof(unsigned char));
 		finalalpha_double = (unsigned char*)realloc(finalalpha_double,evtnrows * sizeof(unsigned char));
 		finalenergy_double = (float*)realloc(finalenergy_double,sizeof(float)*evtnrows);
-		finalpi_double = (int*)realloc(finalpi_double,sizeof(int)*evtnrows);
+		finalpi_double = (unsigned short*)realloc(finalpi_double,sizeof(unsigned short)*evtnrows);
 
 		
 		frow      = 1;
@@ -195,7 +197,7 @@ void processeventseperation()
 		fits_read_col(fevt, TBYTE, 8, frow, felem,evtnrows, &bytenull, evtdety,&anynull, &status);
 		fits_read_col(fevt, TUSHORT, 9, frow, felem,evtnrows, &intnull, evtveto,&anynull, &status);
 		fits_read_col(fevt, TBYTE, 10, frow, felem, evtnrows, &bytenull, evtalpha,&anynull, &status); 
-		fits_read_col(fevt, TINT, 11, frow, felem, evtnrows, &intnull, evtpi,&anynull, &status);
+		fits_read_col(fevt, TUSHORT, 11, frow, felem, evtnrows, &intnull, evtpi,&anynull, &status);
 		fits_read_col(fevt, TFLOAT, 12, frow, felem, evtnrows, &floatnull, evtenergy,&anynull, &status);
 		
 		l1=0;
@@ -320,7 +322,7 @@ void createEventFile(char *outputfile,char *eventfile)
 	          
 	
 	char *ttype[] = { "TIME", "CZTSECCNT","CZTNTICK","PHA","DetID","pixID","DETX","DETY","veto","alpha","PI","ENERGY"};
-	char *tform[] = { "D","D","I","I","B","B","B","B","I","B","I","E"};
+	char *tform[] = { "D","D","U","U","B","B","B","B","U","B","U","E"};
 	char *tunit[] = {"s","s","micro-sec","counts","","","","","counts","counts","",""};
 
 	status=0;
@@ -632,7 +634,7 @@ void printerror( int status)
 }
 
 
-void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,int *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure)
+void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsigned short *pha,unsigned char *detid,unsigned char *pixid,unsigned char*detx,unsigned char *dety,unsigned short *veto,unsigned char *alpha,unsigned short *pi,float *energy,char *outputfile,int writesize,int hdunum,double exposure)
 {
 	fitsfile *fptrOut;       
 	int status, hdutype,intnull;
@@ -676,7 +678,6 @@ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsig
 	fits_write_col(fptrOut, TDOUBLE, 1, frow, felem, writesize, evttime,&status);
 	fits_write_col(fptrOut, TDOUBLE, 2, frow, felem, writesize, cztseccnt,&status);
 	fits_write_col(fptrOut, TUSHORT, 3,frow, felem, writesize, cztntick,&status);  
-	fits_write_col(fptrOut, TUSHORT, 3,frow, felem, writesize, cztntick,&status);  
 	fits_write_col(fptrOut, TUSHORT, 4,frow, felem, writesize, pha,&status);
 	fits_write_col(fptrOut, TBYTE, 5, frow, felem, writesize,detid,&status);
 	fits_write_col(fptrOut, TBYTE, 6,frow, felem, writesize, pixid,&status);
@@ -684,7 +685,7 @@ void writeEvent(double *evttime,double *cztseccnt,unsigned short *cztntick,unsig
     	fits_write_col(fptrOut, TBYTE, 8,frow, felem, writesize, dety,&status);
 	fits_write_col(fptrOut, TUSHORT, 9, frow, felem, writesize, veto,&status);   
 	fits_write_col(fptrOut, TBYTE, 10,frow, felem, writesize,alpha,&status);
-	fits_write_col(fptrOut, TINT, 11,frow, felem, writesize, pi, &status);
+	fits_write_col(fptrOut, TUSHORT, 11,frow, felem, writesize, pi, &status);
 	fits_write_col(fptrOut, TFLOAT, 12,frow, felem, writesize,energy, &status);	
 	
 	if ( fits_close_file(fptrOut, &status) )       
