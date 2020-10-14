@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 void processHeavyBunchClean()
 {
 	fitsfile *caldbfptr,*evtfptr,*bunchfptr;  
-	FILE *logfile,*thrfile;     
+	FILE *logfile,*thrfile, *f1;     
 	double *buntime_heavy,*buntime_real;
 	int *bunsize_real;
 	unsigned char *buntime_dfs,*buntime_dsl;
@@ -211,6 +211,10 @@ void processHeavyBunchClean()
 	sprintf(outlogfile, "%s_hbc.log",file);
 	remove(outlogfile);
 	logfile=fopen(outlogfile,"a"); 
+	
+	sprintf(outlogfile, "%s_hbc_bunchdet.log",file);
+	f1=fopen(outlogfile,"a");
+	
 
 	//fprintf(logfile,"Inputs for Heavy bunch clean\n1.Event file : %s\n2.Bunch file : %s\n3.LLD Threshold file : %s\n\n",tempevt,inbunchfile,caldb_lld_file);
 	//fprintf(logfile,"Important thresholds ....\n1.bun_size_thresh = %d\n2.heavy_bunch_time_threshold_LLD = %f\n3.heavy_bunch_time_threshold_all = %f\n4.module_lld_threshold : %f\n\n",bun_size_thresh,heavy_bunch_time_threshold_LLD,heavy_bunch_time_threshold_all,module_lld_threshold);
@@ -392,8 +396,10 @@ void processHeavyBunchClean()
 		
 		int k;
 		i=0;
+		int num_of_det_perbun;
 		while(i < bunchnrows)
 		{
+			num_of_det_perbun = 0;
 			if((bunchtime[i]<(tstart-1.0)) || (bunchtime[i]>tstop))
 			{
 				i++;
@@ -406,24 +412,29 @@ void processHeavyBunchClean()
 			
 			buntime_real[real_bunch_length] = bunchtime[i];
 			bunsize_real[real_bunch_length] = bunsize[i];
+			
+			bunch_det_count[bunch_detid1[i]]++;
+			bunch_det_count[bunch_detid2[i]]++;
+			bunch_det_count[bunch_detid3[i]]++;
+			bunch_det_count[bunch_detid4[i]]++;
+			// Comment the following 4 lines if running on old bunch file with only 4 det info
+			bunch_det_count[bunch_detid4[i]]++;
+			bunch_det_count[bunch_detid5[i]]++;
+			bunch_det_count[bunch_detid6[i]]++;
+			bunch_det_count[bunch_detid7[i]]++; 
+			if (bunsize[i]==2)bunch_det_count[0]=bunch_det_count[0]-4;
+			else if (bunsize[i]==3)bunch_det_count[0]=bunch_det_count[0]-3;
+			else if (bunsize[i]==4)bunch_det_count[0]=bunch_det_count[0]-2;
+			else if (bunsize[i]==5)bunch_det_count[0]=bunch_det_count[0]-1;
+			
+	
+			
 			if(bunsize[i]!=63)
 			{
-				bunch_det_count[bunch_detid1[i]]++;
-				bunch_det_count[bunch_detid2[i]]++;
-				bunch_det_count[bunch_detid3[i]]++;
-				bunch_det_count[bunch_detid4[i]]++;
-				
-				// Comment the following if running on old bunch file with only 4 det info
-				
-				bunch_det_count[bunch_detid4[i]]++;
-				bunch_det_count[bunch_detid5[i]]++;
-				bunch_det_count[bunch_detid6[i]]++;
-				bunch_det_count[bunch_detid7[i]]++; 
-				
-				
-				
+
 				bundet_heavy_temp = bunch_det_count[0];
 				temp = 0;
+				
 				for(k=1;k<16;k++)
 				{
 					if(bunch_det_count[k]>bundet_heavy_temp)
@@ -431,10 +442,14 @@ void processHeavyBunchClean()
 						bundet_heavy_temp = bunch_det_count[k];
 						temp = k;
 					}
-			
+					
+					if(bunch_det_count[k]>0)num_of_det_perbun++;
 				}
+				
+				if(qid==0)fprintf(f1,"%d\t%d\t%d\n",qid,bunsize[i],num_of_det_perbun);
+				
 				bunch_detid[real_bunch_length]= temp;
-				//printf("%u\n",bunch_detid[real_bunch_length]);
+				
 				
 				
 				if(bunsize_real[real_bunch_length] >= bun_size_thresh)
@@ -463,22 +478,7 @@ void processHeavyBunchClean()
 			else
 			{
 				for(j=i+1;j<bunchnrows;j++)
-				{
-					
-					bunch_det_count[bunch_detid1[i]]++;
-					bunch_det_count[bunch_detid2[i]]++;
-					bunch_det_count[bunch_detid3[i]]++;
-					// Comment the following if running on old bunch file with only 4 det info
-					
-					bunch_det_count[bunch_detid4[i]]++;
-					bunch_det_count[bunch_detid5[i]]++;
-					bunch_det_count[bunch_detid6[i]]++;
-					bunch_det_count[bunch_detid7[i]]++; 
-					
-					//printf("%u\n", bunch_detid7[i]);
-					//~ if(bunsize[i] >= 4)bunch_det_count[bunch_detid4[i]]++;
-					
-					
+				{					
 					
 					if( ((bunchtime[j] - 20.0*(double)buntime_dfs[j]/1000000.0)-(bunchtime[i] + 20.0*(double)buntime_dsl[i]/1000000.0)) < 30.0/1000000.0)
 					{
@@ -486,10 +486,25 @@ void processHeavyBunchClean()
 						i=j;
 						buntime_real[real_bunch_length] = (bunchtime[j] + 20.0*(double)buntime_dsl[j]/1000000.0);
 						bunsize_real[real_bunch_length] = bunsize_real[real_bunch_length]+bunsize[j];
+						
+						bunch_det_count[bunch_detid1[i]]++;
+						bunch_det_count[bunch_detid2[i]]++;
+						bunch_det_count[bunch_detid3[i]]++;
+						// Comment the following 4 lines if running on old bunch file with only 4 det info
+						bunch_det_count[bunch_detid4[i]]++;
+						bunch_det_count[bunch_detid5[i]]++;
+						bunch_det_count[bunch_detid6[i]]++;
+						bunch_det_count[bunch_detid7[i]]++; 
+						if (bunsize[i]==2)bunch_det_count[0]=bunch_det_count[0]-4;
+						else if (bunsize[i]==3)bunch_det_count[0]=bunch_det_count[0]-3;
+						else if (bunsize[i]==4)bunch_det_count[0]=bunch_det_count[0]-2;
+						else if (bunsize[i]==5)bunch_det_count[0]=bunch_det_count[0]-1;
+						
 			
 					}
 					else
 					{
+						
 						
 						if(j==bunchnrows)break;
 						bundet_heavy_temp = bunch_det_count[0];
@@ -501,10 +516,13 @@ void processHeavyBunchClean()
 								bundet_heavy_temp = bunch_det_count[k];
 								temp = k;
 							}
+							if(bunch_det_count[k]>0)num_of_det_perbun++;
 			
 						}
+						if(qid==0)fprintf(f1,"%d\t%d\t%d\n",qid,bunsize_real[real_bunch_length],num_of_det_perbun);
 						bunch_detid[real_bunch_length]= temp;
-						//printf("%u\n",bunch_detid[real_bunch_length]);
+						
+						//printf("%u\n",bunsize_real[real_bunch_length]);
 						
 						
 						if(bunsize_real[real_bunch_length] >= bun_size_thresh)
@@ -522,9 +540,6 @@ void processHeavyBunchClean()
 							small_bunch_length++;
 							
 						}
-						
-						
-		
 						
 						i++;
 						real_bunch_length++;
