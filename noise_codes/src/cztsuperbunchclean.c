@@ -794,7 +794,7 @@ void processSuperBunchClean()
 			BTI_temp = BTITSTOP[i];
 			for(j=i+1;j<BTI_counter;j++)
 			{
-			
+				//~ printf("AGAIN HERE\n");
 				if(BTITSTART[j] <= BTI_temp)
 				{
 					//printf("TRUE____________\n");
@@ -804,6 +804,8 @@ void processSuperBunchClean()
 				}
 				else
 					break;
+					
+				
 				
 			}
 			i=temp_i;
@@ -811,10 +813,14 @@ void processSuperBunchClean()
 			GTITSTART_merge[ii+1]=BTITSTOP_merge[ii];
 			
 			ii++;
+			//~ printf("%ld\t%ld\t%d\n",i,j,BTI_counter);
+
+			if (i==BTI_counter-1){
+				break;}
 		
 		}
 		
-		
+		//~ printf("Reached here------1\n");
 		//fits_read_key(fevt,TDOUBLE,"TSTOP",&GTITSTOP_merge[ii],NULL, &status);
 		GTITSTOP_merge[ii]=tstop;
 		ii++;
@@ -863,6 +869,7 @@ void processSuperBunchClean()
 	
 		for(i=0;i<livetimenrows;i++)
 		{
+			//~ printf("%ld\t%d\n", i,livetimenrows );
 			if( lttime[i]>=(double)(long)tstart && lttime[i]<(double)(long)tstop )
 			{
 				lttime_new[livetimenrows_new] = lttime[i];
@@ -890,7 +897,8 @@ void processSuperBunchClean()
 				
 				}*/
 			}
-			}
+			
+		}
 			//printf("Exposure loss due to bunches initial = %lf\n",exp_loss_due_bunches);
 		
 		//writeLivetime(lttime_new,fracexp_new,livetimenrows_new,outlivetimefile,qid+2);
@@ -909,7 +917,7 @@ void processSuperBunchClean()
 
 		
 		
-		
+		//~ printf("Reached here-----2\n");
 		
 		//To merge two GTIs
 		double *gtitstart_f,*gtitstop_f;
@@ -928,6 +936,8 @@ void processSuperBunchClean()
 		
 		for(i=0;i<gti_counter;i++)
 		{
+			
+			//~ printf("%ld\t%d\n", i,gti_counter );
 			if(gtitstart_sel[i] > gtitstop_sel[i])
 			{
 				printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
@@ -981,8 +991,10 @@ void processSuperBunchClean()
 				
 				
 			}
+			//~ printf("TTT\n", i,gti_counter );
 			
 		}
+		//~ printf("Reached here------3\n");
 		//printf("last gti after merge = %lf \n",gtitstop_f[gtinrows_f-1]);
 		
 		//printf("GTI duration = %ld\n",gtinrows_f);
@@ -1010,12 +1022,13 @@ void processSuperBunchClean()
 		//To generate livetime
 		double livfrac = 0.0;
 		
-		//printf("-----------------------------------------%ld\t%ld\n",livetimenrows_new,gtinrows_f);
+		
 		
 		for(i=0;i<livetimenrows_new;i++)
 		{
 		
 			livfrac = 0.0;
+			//printf("%ld\t%ld\n", i,livetimenrows_new );
 			for(j=0;j<gtinrows_f;j++)
 			{
 				
@@ -1061,7 +1074,11 @@ void processSuperBunchClean()
 			//if(lttime_new[i]>209569630.0 && lttime_new[i]<209569633.0) printf("%lf\n",livfrac);
 			
 			
-			if (livfrac==0.0){fracexp_new[i]=livetime_resolution*2;}
+			if (livfrac==0.0)
+			{
+			//~ fracexp_new[i]=livetime_resolution*2;
+			fracexp_new[i]=livfrac;
+			}
 			//double test_value = fracexp_new[i];
 			else
 			{//fracexp_new[i] = livfrac/(2.0*livetime_resolution)-(1-fracexp_new[i])*(2.0*livetime_resolution);
@@ -1074,15 +1091,15 @@ void processSuperBunchClean()
 			
 			
 			
-			if(fracexp_new[i]<0.1*livetime_resolution*2)
-			{
-					//printf("%lf\t%lf\t%lf\n",fracexp_new[i],livfrac,test_value);
-					BTI_exclude_TSTART[BTI_saturation_no] = lttime_new[i]-livetime_resolution;
-					BTI_exclude_TSTOP[BTI_saturation_no]  = lttime_new[i]+livetime_resolution;
-					BTI_saturation_no++;
-					fracexp_new[i]=livetime_resolution*2.0;
+			//~ if(fracexp_new[i]<0.1*livetime_resolution*2)
+			//~ {
+					//~ //printf("%lf\t%lf\t%lf\n",fracexp_new[i],livfrac,test_value);
+					//~ BTI_exclude_TSTART[BTI_saturation_no] = lttime_new[i]-livetime_resolution;
+					//~ BTI_exclude_TSTOP[BTI_saturation_no]  = lttime_new[i]+livetime_resolution;
+					//~ BTI_saturation_no++;
+					//~ fracexp_new[i]=livetime_resolution*2.0;
 				
-			}
+			//~ }
 			
 		}
 		
@@ -1113,11 +1130,12 @@ void processSuperBunchClean()
 				temp_ii++;
 		}
 		
-		
+		//~ printf("Reached here------4\n");
 		//printf(" ERROR BEGINING  %lf %lf %lf", tstart,BTI_exclude_TSTART[0],BTI_exclude_TSTOP[0]);
 		for(i=temp_ii;i<BTI_saturation_no;i++)
 		{
 			
+			//~ printf("%ld\t%ld\n", i,BTI_saturation_no );
 			if(BTI_exclude_TSTART[i] == BTI_exclude_TSTOP[i])
 			{
 				printf("GTI ERROR PRESENT in Quadrant %d\n",qid);
@@ -1162,10 +1180,10 @@ void processSuperBunchClean()
 		gtitstop_final=(double*)calloc(gtinrows_est_final,sizeof(double));
 
 		//printf("GTI_saturation = %ld\n",GTI_saturation_no);
-		
+		//~ printf("Reached here------5\n");
 		for(i=0;i<GTI_saturation_no;i++)
 		{
-			
+			//~ printf("%ld\t%ld\n", i,GTI_saturation_no );
 			if(GTI_saturation_TSTART[i] == GTI_saturation_TSTOP[i])
 			{
 				

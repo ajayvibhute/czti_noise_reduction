@@ -1,4 +1,4 @@
-prefix=/home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/LIBS/glog_modified-0.3.2/../..
+prefix=/home/user/software/ASTROSAT/czti_noise_reduction/codes/C/czti_pipeline/CZTI/LIBS/glog_modified-0.3.2/../..
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

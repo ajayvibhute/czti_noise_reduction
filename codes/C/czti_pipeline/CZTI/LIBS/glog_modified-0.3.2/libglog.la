@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/LIBS/glog_modified-0.3.2/../../lib'
+libdir='/home/user/software/ASTROSAT/czti_noise_reduction/codes/C/czti_pipeline/CZTI/LIBS/glog_modified-0.3.2/../../lib'

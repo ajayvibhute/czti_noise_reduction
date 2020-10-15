@@ -18,7 +18,7 @@
 # testprog targets. See also changes and comments in configure.in
 #
 
-prefix		= /home/cztipoc/czti/trunk/users/mayuri/pipeline2.1/czti_pipeline/CZTI/LIBS/cfitsio/../..
+prefix		= /home/user/software/ASTROSAT/czti_noise_reduction/codes/C/czti_pipeline/CZTI/LIBS/cfitsio/../..
 exec_prefix	= ${prefix}
 DESTDIR		= 
 CFITSIO_PREFIX	= $(prefix)
