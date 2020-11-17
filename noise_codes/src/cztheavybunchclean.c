@@ -18,8 +18,8 @@
 /*#define bun_size_thresh 15
 #define heavy_bunch_time_threshold_LLD 0.2
 #define heavy_bunch_time_threshold_all 0.005
-#define module_lld_threshold 10.0*/
-#define bunch_time_threshold_small 0.001
+#define module_lld_threshold 10.0
+#define bunch_time_threshold_small 0.001*/
 
 void processHeavyBunchClean();
 void printerror( int status);
@@ -34,7 +34,7 @@ int display_input_parameters(char *infile, char *inbunchfile, char *thresholdfil
 
 char *CZTNOISECLEAN,infile[BUFFSIZE],parfilename[BUFFSIZE], inbunchfile[BUFFSIZE],caldb_lld_file[BUFFSIZE],outfile[BUFFSIZE],thresholdfile[BUFFSIZE];
 int clobber=1, history=1,bun_size_thresh;
-float heavy_bunch_time_threshold_LLD,heavy_bunch_time_threshold_all,module_lld_threshold;
+float heavy_bunch_time_threshold_LLD,heavy_bunch_time_threshold_all,module_lld_threshold, bunch_time_threshold_small;
 
 int main(int argc, char **argv)
 {
@@ -163,14 +163,17 @@ void processHeavyBunchClean()
 	{
 		char *val;
 		strtok_r (label, " ", &val);
-		if (strcmp(label,"bun_size_thresh") == 0)
+		if (strcmp(label,"heavybunchsize") == 0)
 			bun_size_thresh=atoi(val);
-		else if (strcmp(label,"heavy_bunch_time_threshold_all") == 0)
+		else if (strcmp(label,"heavybunchtimedet") == 0)
 			heavy_bunch_time_threshold_all=atof(val);
-		else if (strcmp(label,"heavy_bunch_time_threshold_LLD") == 0)
+		else if (strcmp(label,"heavybunchtime") == 0)
 			heavy_bunch_time_threshold_LLD=atof(val);
 		else if (strcmp(label,"module_lld_threshold") == 0)
 			module_lld_threshold=atof(val);
+		else if (strcmp(label,"smallbunchtimedet") == 0)
+			bunch_time_threshold_small=atof(val);
+		
 	                
 	}	
 	free(label);

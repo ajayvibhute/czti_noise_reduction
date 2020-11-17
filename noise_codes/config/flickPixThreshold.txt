@@ -1,5 +1,5 @@
 flick_energy_thresh 50000
 sigma_thresh_1 3
 flick_count_thresh_1 200000
-sigma_thresh_2 6
-flick_count_thresh_2 1 
+flickersigma  6
+flickernumtimes 2

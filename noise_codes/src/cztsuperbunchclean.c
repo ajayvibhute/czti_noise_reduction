@@ -181,9 +181,9 @@ void processSuperBunchClean()
 			heavy_bun_thresh_count_10ms=atoi(val);
 		else if (strcmp(label,"heavy_bun_thresh_count_1ms") == 0)
 			heavy_bun_thresh_count_1ms=atoi(val);
-		else if (strcmp(label,"bun_size_thresh") == 0)
+		else if (strcmp(label,"superbunchsize") == 0)
 			bun_size_thresh=atoi(val);
-		else if (strcmp(label,"dph_time") == 0)
+		else if (strcmp(label,"DPHtime") == 0)
 			dph_time=atof(val);
 		else if (strcmp(label,"thresh_hot") == 0)
 			thresh_hot=atof(val);	

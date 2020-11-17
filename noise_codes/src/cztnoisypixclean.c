@@ -184,7 +184,7 @@ void processNoiseReduction()
 			DEAD=atoi(value);
 		else if (strcmp(label,"NOISY") == 0)
 			NOISY=atoi(value);
-		else if (strcmp(label,"THRESHOLD") == 0)
+		else if (strcmp(label,"Noisypixsigmathresh") == 0)
 			THRESHOLD=atof(value);	
 	}
 	free(label); 

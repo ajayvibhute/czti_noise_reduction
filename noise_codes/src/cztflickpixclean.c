@@ -163,9 +163,9 @@ void processFlickPixReduction()
 			sigma_thresh_1=atoi(val);
 		else if (strcmp(label,"flick_count_thresh_1") == 0)
 			flick_count_thresh_1=atoi(val);
-		else if (strcmp(label,"sigma_thresh_2") == 0)
+		else if (strcmp(label,"flickersigma") == 0)
 			sigma_thresh_2=atoi(val);
-		else if (strcmp(label,"flick_count_thresh_2") == 0)
+		else if (strcmp(label,"flickernumtimes") == 0)
 			flick_count_thresh_2=atoi(val);	                
 	}
 	free(label);
@@ -205,7 +205,7 @@ void processFlickPixReduction()
 
 	fprintf(logfile,"Inputs for flickering pixel clean\n1.Event file : %s\n2.Bad pixel file : %s\n\n",tempevt,inbadpixfile);
 	fprintf(logfile,"Important thresholds ....\n1.flick_energy_thresh = %d\n2.sigma_thresh_1 = %d\n3.flick_count_thresh_1 = %d\n4.sigma_thresh_2 : %d\n5.flick_count_thresh_2 : %d\n\n",flick_energy_thresh,sigma_thresh_1,flick_count_thresh_1,sigma_thresh_2,flick_count_thresh_2);
-
+	
 	frow      = 1;
 	felem     = 1;
 	doublenull = 0.;
@@ -409,6 +409,8 @@ void processFlickPixReduction()
 		fits_read_col(evtfptr, TDOUBLE, 1, frow, felem, gtinrows, &doublenull, gtitstart,&anynull, &status);
 		fits_read_col(evtfptr, TDOUBLE, 2, frow, felem, gtinrows, &doublenull, gtitstop, &anynull, &status);
 		
+
+		
 		
 		int time_gti_1,time_gti_2;
 		//printf("True---2\n");
@@ -467,8 +469,23 @@ void processFlickPixReduction()
 		fits_movnam_hdu(evtfptr, BINARY_TBL, "EXPOSURE", 0, &status);
 		fits_read_col(evtfptr, TDOUBLE, qid+1, frow, felem, 4096, &doublenull, pixel_exposure[qid],&anynull, &status);
 		
-
-		
+		if (tot_exposure<20000.0)
+		{
+		sigma_thresh_2 = 5;
+		flick_count_thresh_2 = 1;
+		}
+		else if (tot_exposure<120000.0)
+		{
+		sigma_thresh_2 = 6;
+		flick_count_thresh_2 = 2;
+		}
+		else 
+		{
+		sigma_thresh_2 = 8;
+		flick_count_thresh_2 = 2;
+		}
+		fprintf(logfile,"Thresholds changed as per exposure for quadrant %d \nsigma_thresh_2 : %d\nflick_count_thresh_2 : %d\n\n",qid,sigma_thresh_2,flick_count_thresh_2);
+	
 	
 		for(j=0;j<numbin_100s;j++)
 		{

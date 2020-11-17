@@ -1,4 +1,4 @@
 DEAD_PIX_THRESHOLD 10
 DEAD 4
 NOISY 3
-THRESHOLD 5
+Noisypixsigmathresh 5
